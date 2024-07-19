@@ -20,7 +20,7 @@ const BallotSearch = () => {
 			const payload = {
 				cnic: query
 			};
-			const response = await axios.post(`http://localhost:8000/api/ballot`, payload);
+			const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/ballot`, payload);
 			console.log(response);
 			setResults(response.data.data);
 		} catch (err) {
