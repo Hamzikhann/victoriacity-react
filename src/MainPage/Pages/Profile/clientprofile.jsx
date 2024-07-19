@@ -8,108 +8,98 @@ import React, { Component, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { Link, useLocation, useParams } from "react-router-dom";
 import {
-  Avatar_01,
-  Avatar_02,
-  Avatar_05,
-  Avatar_09,
-  Avatar_10,
-  Avatar_11,
-  Avatar_12,
-  Avatar_13,
-  Avatar_16,
-  Avatar_19,
+	Avatar_01,
+	Avatar_02,
+	Avatar_05,
+	Avatar_09,
+	Avatar_10,
+	Avatar_11,
+	Avatar_12,
+	Avatar_13,
+	Avatar_16,
+	Avatar_19
 } from "../../../Entryfile/imagepath";
 // let IDE;
 const ClientProfile = () => {
-  const { id } = useParams();
-  const [profile, setProfile] = useState();
-  const [client, setClient] = useState();
-  const [projects, setProjects] = useState();
-  const [baseApiUrl, setBaseApiUrl] = useState(
-    process.env.REACT_APP_API_URL + "/api/user/"
-  );
+	const { id } = useParams();
+	const [profile, setProfile] = useState();
+	const [client, setClient] = useState();
+	const [projects, setProjects] = useState();
+	const [baseApiUrl, setBaseApiUrl] = useState(process.env.REACT_APP_API_URL + "/api/");
 
-  const getProfileById = () => {
-    Axios.get(baseApiUrl + `customer/id/list?id=${id}`).then((res) => {
-      setProfile(res.data.customers[0]);
-      setProjects(res.data.customers.projects);
-      console.log("xxx", res.data.customers.projects);
-    });
-  };
-  const getClientById = () => {
-    Axios.get(baseApiUrl + `project/id/list?id=${id}`).then((res) => {
-      setClient(res.data.project[0]);
-      // if (id)
-      // console.log(query.get("id"), 'asdasdasd')
-    });
-  };
-  useEffect(() => {
-    getProfileById();
-    getClientById();
-  }, []);
-  // IDE = id;
-  return (
-    <div className="page-wrapper">
-      <Helmet>
-        <title>Client Profile - HRMS admin Template</title>
-        <meta name="description" content="Reactify Blank Page" />
-      </Helmet>
-      {/* Page Content */}
-      <div className="content container-fluid">
-        {/* Page Header */}
-        <div className="page-header">
-          <div className="row">
-            <div className="col-sm-12">
-              <h3 className="page-title">Profile</h3>
-              <ul className="breadcrumb">
-                <li className="breadcrumb-item">
-                  <Link to="/app/main/dashboard">Dashboard</Link>
-                </li>
-                <li className="breadcrumb-item active">Profile</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        {/* /Page Header */}
-        {profile && (
-          <div className="card mb-0">
-            <div className="card-body">
-              <div className="row">
-                <div className="col-md-12">
-                  <div className="profile-view">
-                    <div className="profile-img-wrap">
-                      <div className="profile-img">
-                        <a href="">
-                          <img
-                            src={profile.image}
-                            alt=""
-                            onError={({ currentTarget }) => {
-                              currentTarget.onerror = null; // prevents looping
-                              currentTarget.src =
-                                "https://www.pngitem.com/pimgs/m/581-5813504_avatar-dummy-png-transparent-png.png";
-                            }}
-                            className="avatar"
-                          />
-                        </a>
-                      </div>
-                    </div>
-                    <div className="profile-basic">
-                      <div className="row">
-                        <div className="col-md-5">
-                          <div className="profile-info-left">
-                            <h3 className="user-name m-t-0">
-                              {profile.companyName}
-                            </h3>
-                            <h5 className="company-role m-t-0 mb-0">
-                              {profile.fullName}
-                            </h5>
-                            <small className="text-muted">
-                              {profile.designationDetail.title}
-                            </small>
-                            <div className="staff-id">
-                              Client ID : {profile.customerId}
-                            </div>
-                            {/* <div className="staff-msg">
+	const getProfileById = () => {
+		Axios.get(baseApiUrl + `customer/id/list?id=${id}`).then((res) => {
+			setProfile(res.data.customers[0]);
+			setProjects(res.data.customers.projects);
+			// console.log("xxx", res.data.customers.projects);
+		});
+	};
+	const getClientById = () => {
+		Axios.get(baseApiUrl + `project/id/list?id=${id}`).then((res) => {
+			setClient(res.data.project[0]);
+			// if (id)
+			// console.log(query.get("id"), 'asdasdasd')
+		});
+	};
+	useEffect(() => {
+		getProfileById();
+		getClientById();
+	}, []);
+	// IDE = id;
+	return (
+		<div className="page-wrapper">
+			<Helmet>
+				<title>Client Profile - HRMS admin Template</title>
+				<meta name="description" content="Reactify Blank Page" />
+			</Helmet>
+			{/* Page Content */}
+			<div className="content container-fluid">
+				{/* Page Header */}
+				<div className="page-header">
+					<div className="row">
+						<div className="col-sm-12">
+							<h3 className="page-title">Profile</h3>
+							<ul className="breadcrumb">
+								<li className="breadcrumb-item">
+									<Link to="/app/main/dashboard">Dashboard</Link>
+								</li>
+								<li className="breadcrumb-item active">Profile</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				{/* /Page Header */}
+				{profile && (
+					<div className="card mb-0">
+						<div className="card-body">
+							<div className="row">
+								<div className="col-md-12">
+									<div className="profile-view">
+										<div className="profile-img-wrap">
+											<div className="profile-img">
+												<a href="">
+													<img
+														src={profile.image}
+														alt=""
+														onError={({ currentTarget }) => {
+															currentTarget.onerror = null; // prevents looping
+															currentTarget.src =
+																"https://www.pngitem.com/pimgs/m/581-5813504_avatar-dummy-png-transparent-png.png";
+														}}
+														className="avatar"
+													/>
+												</a>
+											</div>
+										</div>
+										<div className="profile-basic">
+											<div className="row">
+												<div className="col-md-5">
+													<div className="profile-info-left">
+														<h3 className="user-name m-t-0">{profile.companyName}</h3>
+														<h5 className="company-role m-t-0 mb-0">{profile.fullName}</h5>
+														<small className="text-muted">{profile.designationDetail.title}</small>
+														<div className="staff-id">Client ID : {profile.customerId}</div>
+														{/* <div className="staff-msg">
                               <Link
                                 to="/conversation/chat"
                                 className="btn btn-custom"
@@ -117,94 +107,87 @@ const ClientProfile = () => {
                                 Send Message
                               </Link>
                             </div> */}
-                          </div>
-                        </div>
-                        <div className="col-md-7">
-                          <ul className="personal-info">
-                            <li>
-                              <span className="title">Phone:</span>
-                              <span className="text">
-                                <a href="">{profile.contact}</a>
-                              </span>
-                            </li>
-                            <li>
-                              <span className="title">Email:</span>
-                              <span className="text">
-                                <a href="">{profile.email}</a>
-                              </span>
-                            </li>
-                            <li>
-                              <span className="title">Birthday:</span>
-                              <span className="text">{profile.dob}</span>
-                            </li>
-                            <li>
-                              <span className="title">Address:</span>
-                              <span className="text">{profile.address}</span>
-                            </li>
-                            <li>
-                              <span className="title">Gender:</span>
-                              <span className="text">{profile.gender}</span>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-        <div className="card tab-box">
-          <div className="row user-tabs">
-            <div className="col-lg-12 col-md-12 col-sm-12 line-tabs">
-              <ul className="nav nav-tabs nav-tabs-bottom">
-                <li className="nav-item col-sm-3">
-                  <a
-                    className="nav-link active"
-                    data-bs-toggle="tab"
-                    href="#myprojects"
-                  >
-                    Projects
-                  </a>
-                </li>
-                {/* <li className="nav-item col-sm-3">
+													</div>
+												</div>
+												<div className="col-md-7">
+													<ul className="personal-info">
+														<li>
+															<span className="title">Phone:</span>
+															<span className="text">
+																<a href="">{profile.contact}</a>
+															</span>
+														</li>
+														<li>
+															<span className="title">Email:</span>
+															<span className="text">
+																<a href="">{profile.email}</a>
+															</span>
+														</li>
+														<li>
+															<span className="title">Birthday:</span>
+															<span className="text">{profile.dob}</span>
+														</li>
+														<li>
+															<span className="title">Address:</span>
+															<span className="text">{profile.address}</span>
+														</li>
+														<li>
+															<span className="title">Gender:</span>
+															<span className="text">{profile.gender}</span>
+														</li>
+													</ul>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				)}
+				<div className="card tab-box">
+					<div className="row user-tabs">
+						<div className="col-lg-12 col-md-12 col-sm-12 line-tabs">
+							<ul className="nav nav-tabs nav-tabs-bottom">
+								<li className="nav-item col-sm-3">
+									<a className="nav-link active" data-bs-toggle="tab" href="#myprojects">
+										Projects
+									</a>
+								</li>
+								{/* <li className="nav-item col-sm-3">
                   <a className="nav-link" data-bs-toggle="tab" href="#tasks">
                     Tasks
                   </a>
                 </li> */}
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-lg-12">
-            <div className="tab-content profile-tab-content">
-              {/* Projects Tab */}
-              <div id="myprojects" className="tab-pane fade show active">
-                <div className="row">
-                  {projects &&
-                    projects.map((item) => (
-
-                      <div className="col-lg-4 col-sm-6 col-md-4 col-xl-3">
-                        <div className="card">
-                          <div className="card-body">
-                            {/* <diz */}
-                            <h4 className="project-title">
-                              <Link to={`/app/projects/projects-view?id=${item.id}`}>
-                                {item.name} {console.log(item,"sdfdfsdfsdfsdfdfdfs")}
-                              </Link>
-                            </h4>
-                            {/* <small className="block text-ellipsis m-b-15">
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div className="row">
+					<div className="col-lg-12">
+						<div className="tab-content profile-tab-content">
+							{/* Projects Tab */}
+							<div id="myprojects" className="tab-pane fade show active">
+								<div className="row">
+									{projects &&
+										projects.map((item) => (
+											<div className="col-lg-4 col-sm-6 col-md-4 col-xl-3">
+												<div className="card">
+													<div className="card-body">
+														{/* <diz */}
+														<h4 className="project-title">
+															<Link to={`/app/projects/projects-view?id=${item.id}`}>
+																{item.name} {console.log(item, "sdfdfsdfsdfsdfdfdfs")}
+															</Link>
+														</h4>
+														{/* <small className="block text-ellipsis m-b-15">
                          <span className="text-xs">1</span>{" "}
                          <span className="text-muted">open tasks, </span>
                          <span className="text-xs">9</span>{" "}
                          <span className="text-muted">tasks completed</span>
                        </small> */}
-                            <p className="text-muted">
-                              {item.description}
-                            </p>
-                            {/* <div className="pro-deadline m-b-15">
+														<p className="text-muted">{item.description}</p>
+														{/* <div className="pro-deadline m-b-15">
                          <div className="sub-title">Deadline:</div>
                          <div className="text-muted">17 Apr 2019</div>
                        </div>
@@ -353,11 +336,11 @@ const ClientProfile = () => {
                            style={{ width: "40%" }}
                          />
                        </div> */}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  {/* <div className="col-lg-4 col-sm-6 col-md-4 col-xl-3">
+													</div>
+												</div>
+											</div>
+										))}
+									{/* <div className="col-lg-4 col-sm-6 col-md-4 col-xl-3">
                     <div className="card">
                       <div className="card-body">
                         <div className="dropdown profile-action">
@@ -954,13 +937,13 @@ const ClientProfile = () => {
                       </div>
                     </div>
                   </div> */}
-                </div>
-              </div>
-              {/* /Projects Tab */}
+								</div>
+							</div>
+							{/* /Projects Tab */}
 
-              {/* Task Tab */}
+							{/* Task Tab */}
 
-              {/* <div id="tasks" className="tab-pane fade">
+							{/* <div id="tasks" className="tab-pane fade">
                 <div className="project-task">
                   <ul className="nav nav-tabs nav-tabs-top nav-justified mb-0">
                     <li className="nav-item">
@@ -1238,13 +1221,13 @@ const ClientProfile = () => {
                 </div>
               </div> */}
 
-              {/* /Task Tab */}
-            </div>
-          </div>
-        </div>
-      </div>
-      {/* /Page Content */}
-    </div>
-  );
+							{/* /Task Tab */}
+						</div>
+					</div>
+				</div>
+			</div>
+			{/* /Page Content */}
+		</div>
+	);
 };
 export default ClientProfile;

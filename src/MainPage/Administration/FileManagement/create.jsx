@@ -1,225 +1,219 @@
 import { Button } from "antd";
 import { Formik } from "formik";
 import { Helmet } from "react-helmet";
-import React,{ useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Table , Input , Space } from "antd";
+import { Table, Input, Space } from "antd";
 import { itemRender, onShowSizeChange } from "../../paginationfunction";
 
-const Create =() => {
+const Create = () => {
+	const [isShowProjectModal, setIsShowProjectModal] = useState(false);
 
-  const [isShowProjectModal, setIsShowProjectModal] = useState(false);
+	// const columns = [
+	//   {
+	//     title: "Serial #",
+	//     dataIndex: "id",
+	//     sorter: (a, b) => a.id - b.id,
+	//     // render: (text, record) => (
+	//     //   <span>{record.id}</span>
+	//     // ),
+	//     // ...getColumnSearchProps('id'),
+	//   },
 
+	//   {
+	//     title: "Application Reg no",
+	//     dataIndex: "applicationRegno",
+	//     // render: (text, record) => (
+	//     //   <Link to="/app/administrator/job-details">{text}</Link>
+	//     // ),
+	//     sorter: (a, b) => a.applicationRegno.length - b.applicationRegno.length,
+	//   },
+	//   {
+	//     title: "Reg no",
+	//     dataIndex: "regno",
+	//     sorter: (a, b) => a.regno.length - b.regno.length,
+	//   },
+	//   {
+	//     title: "Owner",
+	//     dataIndex: "owner",
+	//     sorter: (a, b) => a.owner.length - b.owner.length,
+	//   },
+	//   {
+	//     title: "Second Owner",
+	//     dataIndex: "secondOwner",
+	//     sorter: (a, b) => a.secondOwner.length - b.secondOwner.length,
+	//   },
+	//   {
+	//       title: "Phase",
+	//       dataIndex: "phase",
+	//       sorter: (a, b) => a.phase.length - b.phase.length,
+	//     },
+	//     {
+	//       title: "Sector",
+	//       dataIndex: "sector",
+	//       sorter: (a, b) => a.sector.length - b.sector.length,
+	//     },{
+	//       title: "Unit Type",
+	//       dataIndex: "unitType",
+	//       sorter: (a, b) => a.unitType.length - b.unitType.length,
+	//     },
+	//     {
+	//       title: "PlotSize Size",
+	//       dataIndex: "plotSize",
+	//       sorter: (a, b) => a.plotSize.length - b.plotSize.length,
+	//     },
+	//     {
+	//       title: "Unit Nature",
+	//       dataIndex: "unitNature",
+	//       sorter: (a, b) => a.unitNature.length - b.unitNature.length,
+	//     },
+	//   {
+	//     title: "PaymentPlan Plan",
+	//     dataIndex: "packagePlan",
+	//     sorter: (a, b) => a.packagePlan.length - b.packagePlan.length,
+	//     // render: (text,record)=>(
+	//     // <span>{format(new Date(text), format('dd MM yy' ))}</span>
+	//     // )
+	//   },
+	//   {
+	//     title: "Total Amount",
+	//     dataIndex: "totalAmount",
+	//     sorter: (a, b) => a.totalAmount.length - b.totalAmount.length,
+	//   },
 
-  // const columns = [
-  //   {
-  //     title: "Serial #",
-  //     dataIndex: "id",
-  //     sorter: (a, b) => a.id - b.id,
-  //     // render: (text, record) => (
-  //     //   <span>{record.id}</span>
-  //     // ),
-  //     // ...getColumnSearchProps('id'),
-  //   },
-    
-  //   {
-  //     title: "Application Reg no",
-  //     dataIndex: "applicationRegno",
-  //     // render: (text, record) => (
-  //     //   <Link to="/app/administrator/job-details">{text}</Link>
-  //     // ),
-  //     sorter: (a, b) => a.applicationRegno.length - b.applicationRegno.length,
-  //   },
-  //   {
-  //     title: "Reg no",
-  //     dataIndex: "regno",
-  //     sorter: (a, b) => a.regno.length - b.regno.length,
-  //   },
-  //   {
-  //     title: "Owner",
-  //     dataIndex: "owner",
-  //     sorter: (a, b) => a.owner.length - b.owner.length,
-  //   },
-  //   {
-  //     title: "Second Owner",
-  //     dataIndex: "secondOwner",
-  //     sorter: (a, b) => a.secondOwner.length - b.secondOwner.length,
-  //   },
-  //   {
-  //       title: "Phase",
-  //       dataIndex: "phase",
-  //       sorter: (a, b) => a.phase.length - b.phase.length,
-  //     },
-  //     {
-  //       title: "Sector",
-  //       dataIndex: "sector",
-  //       sorter: (a, b) => a.sector.length - b.sector.length,
-  //     },{
-  //       title: "Unit Type",
-  //       dataIndex: "unitType",
-  //       sorter: (a, b) => a.unitType.length - b.unitType.length,
-  //     },
-  //     {
-  //       title: "PlotSize Size",
-  //       dataIndex: "plotSize",
-  //       sorter: (a, b) => a.plotSize.length - b.plotSize.length,
-  //     },
-  //     {
-  //       title: "Unit Nature",
-  //       dataIndex: "unitNature",
-  //       sorter: (a, b) => a.unitNature.length - b.unitNature.length,
-  //     },
-  //   {
-  //     title: "PaymentPlan Plan",
-  //     dataIndex: "packagePlan",
-  //     sorter: (a, b) => a.packagePlan.length - b.packagePlan.length,
-  //     // render: (text,record)=>(
-  //     // <span>{format(new Date(text), format('dd MM yy' ))}</span>
-  //     // )
-  //   },
-  //   {
-  //     title: "Total Amount",
-  //     dataIndex: "totalAmount",
-  //     sorter: (a, b) => a.totalAmount.length - b.totalAmount.length,
-  //   },
+	//   {
+	//     title: "Advance",
+	//     dataIndex: "advance",
+	//     sorter: (a, b) => a.advance.length - b.advance.length,
+	//   },
+	//   {
+	//     title: "Remaining",
+	//     dataIndex: "remaining",
+	//     sorter: (a, b) => a.remaining.length - b.remaining.length,
+	//   },
+	//   {
+	//       title: "Ballot",
+	//       dataIndex: "ballot",
+	//       sorter: (a, b) => a.ballot.length - b.ballot.length,
+	//   },
+	//     {
+	//       title: "Possession",
+	//       dataIndex: "possession",
+	//       sorter: (a, b) => a.possession.length - b.possession.length,
+	//     },
+	//     {
+	//       title: "By Annual Charges",
+	//       dataIndex: "byAnnualCharges",
+	//       sorter: (a, b) => a.byAnnualCharges.length - b.byAnnualCharges.length,
+	//     },
+	//     {
+	//       title: "By Annual After Month",
+	//       dataIndex: "byAnnualAfterMonth",
+	//       sorter: (a, b) => a.byAnnualAfterMonth.length - b.byAnnualAfterMonth.length,
+	//     },
+	//     {
+	//       title: "Num Installments",
+	//       dataIndex: "numInstallments",
+	//       sorter: (a, b) => a.numInstallments.length - b.numInstallments.length,
+	//     },
+	//     {
+	//       title: "Created at",
+	//       dataIndex: "createdat",
+	//       sorter: (a, b) => a.createdat.length - b.createdat.length,
+	//     },
+	//     {
+	//       title: "Updated at",
+	//       dataIndex: "updatedat",
+	//       sorter: (a, b) => a.updatedat.length - b.updatedat.length,
+	//     },
+	//   {
+	//     title: "Action",
+	//     render: (text, record) => {
+	//       // console.log(
+	//       //   "iiiiiiiiiiiiiii",
+	//       //   text.relation,
+	//       //   options.find((item) => item.label === text.relation)
+	//       // );
 
-  //   {
-  //     title: "Advance",
-  //     dataIndex: "advance",
-  //     sorter: (a, b) => a.advance.length - b.advance.length,
-  //   },
-  //   {
-  //     title: "Remaining",
-  //     dataIndex: "remaining",
-  //     sorter: (a, b) => a.remaining.length - b.remaining.length,
-  //   },
-  //   {
-  //       title: "Ballot",
-  //       dataIndex: "ballot",
-  //       sorter: (a, b) => a.ballot.length - b.ballot.length,
-  //   },
-  //     {
-  //       title: "Possession",
-  //       dataIndex: "possession",
-  //       sorter: (a, b) => a.possession.length - b.possession.length,
-  //     },
-  //     {
-  //       title: "By Annual Charges",
-  //       dataIndex: "byAnnualCharges",
-  //       sorter: (a, b) => a.byAnnualCharges.length - b.byAnnualCharges.length,
-  //     },
-  //     {
-  //       title: "By Annual After Month",
-  //       dataIndex: "byAnnualAfterMonth",
-  //       sorter: (a, b) => a.byAnnualAfterMonth.length - b.byAnnualAfterMonth.length,
-  //     },
-  //     {
-  //       title: "Num Installments",
-  //       dataIndex: "numInstallments",
-  //       sorter: (a, b) => a.numInstallments.length - b.numInstallments.length,
-  //     },
-  //     {
-  //       title: "Created at",
-  //       dataIndex: "createdat",
-  //       sorter: (a, b) => a.createdat.length - b.createdat.length,
-  //     },
-  //     {
-  //       title: "Updated at",
-  //       dataIndex: "updatedat",
-  //       sorter: (a, b) => a.updatedat.length - b.updatedat.length,
-  //     },
-  //   {
-  //     title: "Action",
-  //     render: (text, record) => {
-  //       // console.log(
-  //       //   "iiiiiiiiiiiiiii",
-  //       //   text.relation,
-  //       //   options.find((item) => item.label === text.relation)
-  //       // );
+	//       return (
+	//         <div className="dropdown dropdown-action text-end">
+	//           <Link
+	//             to="/"
+	//             className="action-icon dropdown-toggle"
+	//             data-bs-toggle="dropdown"
+	//             aria-expanded="false"
+	//           >
+	//             <i className="material-icons">more_vert</i>
+	//           </Link>
+	//           <div className="dropdown-menu dropdown-menu-right">
+	//             <Link
+	//               to="/"
+	//               className="dropdown-item"
+	//               data-bs-toggle="modal"
+	//               data-bs-target="#edit_member"
+	//               // onClick={() => {
+	//               //   setQuery(text.id);
+	//               //   setMemberInitialValues({
+	//               //     memberName: "",
+	//               //     contact: "",
+	//               //     email: "",
+	//               //     cnic: "",
+	//               //     fatherName: "",
+	//               //     userImage: "",
+	//               //     dob: "",
+	//               //     address: "",
+	//               //     permanentAddress: "",
+	//               //     ...text,
+	//               //     relation: options.find(item => item.label === text.relation),
+	//               //   })
+	//               // }}
+	//             >
+	//               <i className="fa fa-pencil m-r-5" /> Edit
+	//             </Link>
+	//             <Link
+	//               to="/"
+	//               className="dropdown-item"
+	//               data-bs-toggle="modal"
+	//               data-bs-target="#delete_member"
+	//               onClick={() => {
+	//                 setQuery(text.id);
+	//               }}
+	//             >
+	//               <i className="fa fa-trash-o m-r-5" /> Delete
+	//             </Link>
+	//           </div>
+	//         </div>
+	//       );
+	//     },
+	//   },
+	// ];
 
-  //       return (
-  //         <div className="dropdown dropdown-action text-end">
-  //           <Link
-  //             to="/"
-  //             className="action-icon dropdown-toggle"
-  //             data-bs-toggle="dropdown"
-  //             aria-expanded="false"
-  //           >
-  //             <i className="material-icons">more_vert</i>
-  //           </Link>
-  //           <div className="dropdown-menu dropdown-menu-right">
-  //             <Link
-  //               to="/"
-  //               className="dropdown-item"
-  //               data-bs-toggle="modal"
-  //               data-bs-target="#edit_member"
-  //               // onClick={() => {
-  //               //   setQuery(text.id);
-  //               //   setMemberInitialValues({
-  //               //     memberName: "",
-  //               //     contact: "",
-  //               //     email: "",
-  //               //     cnic: "",
-  //               //     fatherName: "",
-  //               //     userImage: "",
-  //               //     dob: "",
-  //               //     address: "",
-  //               //     permanentAddress: "",
-  //               //     ...text,
-  //               //     relation: options.find(item => item.label === text.relation),
-  //               //   })
-  //               // }}
-  //             >
-  //               <i className="fa fa-pencil m-r-5" /> Edit
-  //             </Link>
-  //             <Link
-  //               to="/"
-  //               className="dropdown-item"
-  //               data-bs-toggle="modal"
-  //               data-bs-target="#delete_member"
-  //               onClick={() => {
-  //                 setQuery(text.id);
-  //               }}
-  //             >
-  //               <i className="fa fa-trash-o m-r-5" /> Delete
-  //             </Link>
-  //           </div>
-  //         </div>
-  //       );
-  //     },
-  //   },
-  // ];
+	return (
+		<div className="page-wrapper">
+			<Helmet>
+				<title>Administration - HRMS Admin Template</title>
+				<meta name="description" content="Login page" />
+			</Helmet>
 
-
-  return (
-    <div className="page-wrapper">
-     
-    <Helmet>
-      <title>Administration - HRMS Admin Template</title>
-      <meta name="description" content="Login page" />
-    </Helmet>
-
-    {/* Page Content */}
-    <div className="content container-fluid">
-      {/* Page Header */}
-      <div className="page-header">
-        <div className="row align-items-center">
-          <div className="col">
-            <h3 className="page-title">Booking Process</h3>
-            <ul className="breadcrumb">
-              <li className="breadcrumb-item"><Link to="/app/main/dashboard">Administration</Link></li>
-              <li className="breadcrumb-item active">Booking Process</li>
-            </ul>
-          </div>
-          <div className="col-auto float-end ml-auto">
-          <p
-                href="#"
-                className="btn add-btn"
-                onClick={() => setIsShowProjectModal(true)}
-              >
-                <i className="fa fa-plus" /> Create Booking
-              </p>
-              {/* <div className="view-icons">
+			{/* Page Content */}
+			<div className="content container-fluid">
+				{/* Page Header */}
+				<div className="page-header">
+					<div className="row align-items-center">
+						<div className="col">
+							<h3 className="page-title">Booking Process</h3>
+							<ul className="breadcrumb">
+								<li className="breadcrumb-item">
+									<Link to="/app/main/dashboard">Administration</Link>
+								</li>
+								<li className="breadcrumb-item active">Booking Process</li>
+							</ul>
+						</div>
+						<div className="col-auto float-end ml-auto">
+							<p href="#" className="btn add-btn" onClick={() => setIsShowProjectModal(true)}>
+								<i className="fa fa-plus" /> Create Booking
+							</p>
+							{/* <div className="view-icons">
                 <Link
                   to="/app/projects/project_dashboard"
                   className="grid-view btn btn-link active"
@@ -233,13 +227,13 @@ const Create =() => {
                   <i className="fa fa-bars" />
                 </Link>
               </div> */}
-            </div>
-        </div>
-      </div>
-      {/* /Page Header */}
+						</div>
+					</div>
+				</div>
+				{/* /Page Header */}
 
-      {/* Search Filter */}
-      {/* <div className="row filter-row ">
+				{/* Search Filter */}
+				{/* <div className="row filter-row ">
           <div className="col-sm-6 col-md-4">
             <div className="form-group">
               <lable style={{text:"bold"}}> Form No</lable>
@@ -249,29 +243,30 @@ const Create =() => {
                 className="form-control"
                 onChange={(event) => setQuery(event.target.value)}
               />
-    
+
             </div>
           </div>
           </div> */}
-             <div className="col-sm-6 col-md-4">
-             <lable style={{}}> Form No</lable><br></br><br></br>
-             <input style={{width:"270px",height:"46px"}}
-             type="text"/>
+				<div className="col-sm-6 col-md-4">
+					<lable style={{}}> Form No</lable>
+					<br></br>
+					<br></br>
+					<input style={{ width: "270px", height: "46px" }} type="text" />
 
-              
-              <div className="submit-section">
-              <button style={{float:"left"}}
-                            type="submit"
-                            data-bs-dismiss="modal"
-                            // disabled={!isValid}
-                            className="btn btn-primary submit-btn"
-                            // onClick={handleSubmit}
-                          >
-                            Search
-                          </button>    
-                          </div>  
-                          </div>        
-          {/* <div className="row">
+					<div className="submit-section">
+						<button
+							style={{ float: "left" }}
+							type="submit"
+							data-bs-dismiss="modal"
+							// disabled={!isValid}
+							className="btn btn-primary submit-btn"
+							// onClick={handleSubmit}
+						>
+							Search
+						</button>
+					</div>
+				</div>
+				{/* <div className="row">
           {filteredFile &&
             filteredFile
               .filter((item) => {
@@ -285,8 +280,7 @@ const Create =() => {
               })}
               </div> */}
 
-        
-      {/* <div className="row filter-row">
+				{/* <div className="row filter-row">
         <div className="col-sm-6 col-md-6">
           <div className="form-group form-focus">
             <input type="text" className="form-control floating" />
@@ -315,9 +309,9 @@ const Create =() => {
           <Link to="/" className="btn btn-success btn-block w-100"> Search </Link>
         </div>
       </div> */}
-      {/* /Search Filter */}
+				{/* /Search Filter */}
 
-      {/* <div className="col-md-12">
+				{/* <div className="col-md-12">
         <div className="table-responsive">
           <Table
             className="table-striped"
@@ -327,7 +321,7 @@ const Create =() => {
               // showSizeChanger: true, onShowSizeChange: onShowSizeChange, itemRender: itemRender
             }}
             style={{ overflowX: "auto" }}
-            
+
             // columns={columns}
             bordered
             // dataSource={booking}
@@ -335,12 +329,11 @@ const Create =() => {
           />
         </div>
       </div> */}
-     
-    </div>
-    {/* /Page Content */}
+			</div>
+			{/* /Page Content */}
 
-    {/* Create File Modal */}
-    {/* <Modal show={isShowProjectModal} dialogClassName="employee-modal">
+			{/* Create File Modal */}
+			{/* <Modal show={isShowProjectModal} dialogClassName="employee-modal">
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title">Create File</h5>
@@ -375,11 +368,11 @@ const Create =() => {
                 if (!values.plotType) {
                   errors.plotType = "plotType is required";
                 }
-                
+
                 if (!values.unitType) {
                   errors.unitType = "unitType is required";
                 }
-                
+
                 if (!values.phase) {
                   errors.phase = "Phase is required";
                 }
@@ -392,17 +385,17 @@ const Create =() => {
                 if (!values.paymentPlan) {
                   errors.paymentPlan = "PaymentPlan is required";
                 }
-                
+
                 if (!values.plotSize) {
                   errors.plotSize = "plotSize is required";
                 }
                 if (!values.unitNatureType) {
                   errors.unitNatureType = "unitNatureType is required";
                 }
-               
+
                 return errors;
               }}
-            
+
               onSubmit={async (values, {setSubmitting}) => {
                   console.log("sdfannsdfnhamamamammama")
                 const formData = {
@@ -421,7 +414,7 @@ const Create =() => {
                   unitNatureType: values.unitNatureType
                 };
                   console.log("sdfannsdfnhamamamammama",formData)
-              
+
                 try {
                   setloading(true);
                   const res = await Axios.post(
@@ -450,7 +443,7 @@ const Create =() => {
                 setFieldValue,
                 isSubmitting,
                 isValid,
-               
+
               }) => {
                 return (
                   <form onSubmit={handleSubmit} >
@@ -683,7 +676,7 @@ const Create =() => {
                             </span>
                             </div>
                         </div>
-                   
+
                     </div>
                     <div className="submit-section">
                         {loading ? (
@@ -719,12 +712,12 @@ const Create =() => {
           </div>
         </div>
       </Modal> */}
-      {/* /Create File Modal */}
-    {/* Edit File Modal */}
+			{/* /Create File Modal */}
+			{/* Edit File Modal */}
 
-    {/* /Edit File Modal */}
-    {/* Delete File Modal */}
-    {/* <div className="modal custom-modal fade" id="delete_member" role="dialog">
+			{/* /Edit File Modal */}
+			{/* Delete File Modal */}
+			{/* <div className="modal custom-modal fade" id="delete_member" role="dialog">
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
           <div className="modal-body">
@@ -754,9 +747,9 @@ const Create =() => {
         </div>
       </div>
     </div> */}
-    {/* /Delete File Modal */}
-  </div>
-  );
-}
+			{/* /Delete File Modal */}
+		</div>
+	);
+};
 
-export default Create
+export default Create;

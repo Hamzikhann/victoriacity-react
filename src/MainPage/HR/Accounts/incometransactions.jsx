@@ -16,190 +16,171 @@ import { useParams } from "react-router-dom";
 import DropdownTreeSelect from "react-dropdown-tree-select";
 
 const IncomeTransactions = () => {
-  let { id } = useParams();
-  console.log("FFFFFFFFFFFFFFFFFFFFF", id);
-  const [accountTransaction, setAccountTransaction] = useState(id);
-  // const [categoryName, setCategoryName] = useState();
-  const [settings, setSettings] = useState([]);
-  const [settingList, setSettingList] = useState([]);
-  const [isShowProjectModal, setIsShowProjectModal] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [totalPage, setTotalPage] = useState(0);
-  const [categoryList, setCategoryList] = useState([]);
-  const [isShowIncomeModal, setIsShowIncomeModal] = useState(false);
-  const [isShowVictoriaIncomeModal, setIsShowVictoriaIncomeModal] = useState(false);
-  const [userRole, setuserRole] = useState();
-  const [baseApiUrl, setBaseApiUrl] = useState(
-    process.env.REACT_APP_API_URL + "/api/user/"
-  );
-  const [isShowAccountTransactionModal, setIsShowAccountTransactionModal] =
-    useState(false);
-  const [isShowEditProjectModal, setIsShowEditProjectModal] = useState(false);
-  const [accountTransactionInitialValues, setAccountTransactionInitialValues] =
-    useState({
-      amount: "",
-      categoryId: "",
-      projectId: "",
-      type: "Income",
-    });
-  const [data, setData] = useState([]);
-  const [treeData, setTreeData] = useState([]);
+	let { id } = useParams();
+	console.log("FFFFFFFFFFFFFFFFFFFFF", id);
+	const [accountTransaction, setAccountTransaction] = useState(id);
+	// const [categoryName, setCategoryName] = useState();
+	const [settings, setSettings] = useState([]);
+	const [settingList, setSettingList] = useState([]);
+	const [isShowProjectModal, setIsShowProjectModal] = useState(false);
+	const [loading, setLoading] = useState(false);
+	const [totalPage, setTotalPage] = useState(0);
+	const [categoryList, setCategoryList] = useState([]);
+	const [isShowIncomeModal, setIsShowIncomeModal] = useState(false);
+	const [isShowVictoriaIncomeModal, setIsShowVictoriaIncomeModal] = useState(false);
+	const [userRole, setuserRole] = useState();
+	const [baseApiUrl, setBaseApiUrl] = useState(process.env.REACT_APP_API_URL + "/api/");
+	const [isShowAccountTransactionModal, setIsShowAccountTransactionModal] = useState(false);
+	const [isShowEditProjectModal, setIsShowEditProjectModal] = useState(false);
+	const [accountTransactionInitialValues, setAccountTransactionInitialValues] = useState({
+		amount: "",
+		categoryId: "",
+		projectId: "",
+		type: "Income"
+	});
+	const [data, setData] = useState([]);
+	const [treeData, setTreeData] = useState([]);
 
-  const option1 = [
-    { value: 1, label: "Income", type: "income" },
-    { value: 2, label: "Expense", type: "expense" },
-  ];
+	const option1 = [
+		{ value: 1, label: "Income", type: "income" },
+		{ value: 2, label: "Expense", type: "expense" }
+	];
 
-  const getAccountTransaction = (projectId, page) => {
-    Axios.get(
-      baseApiUrl +
-        `accountTransaction/projectId?projectId=${projectId}&type=income&page=${page}`
-    )
-      .then((res) => {
-        setData(res.data.Transaction);
-        setTotalPage(res.data.totalPage);
-      })
-      .catch((err) => console.log(err?.response?.data));
-  };
+	const getAccountTransaction = (projectId, page) => {
+		Axios.get(baseApiUrl + `accountTransaction/projectId?projectId=${projectId}&type=income&page=${page}`)
+			.then((res) => {
+				setData(res.data.Transaction);
+				setTotalPage(res.data.totalPage);
+			})
+			.catch((err) => console.log(err?.response?.data));
+	};
 
-  const handleTableChange = (pagination, filters, sorter) => {
-    getAccountTransaction(accountTransaction, pagination.current);
-  };
-  const handleVictoria = (pagination, filters, sorter) => {
-    getAccountTransaction(accountTransaction, pagination.current);
-  };
+	const handleTableChange = (pagination, filters, sorter) => {
+		getAccountTransaction(accountTransaction, pagination.current);
+	};
+	const handleVictoria = (pagination, filters, sorter) => {
+		getAccountTransaction(accountTransaction, pagination.current);
+	};
 
-  //   const getAllSetting = () => {
-  //     Axios.get(baseApiUrl +  "settings/getIncomeCategories")
-  //         .then((res) => {
-  //             res.data.Settings.map((item) => {
-  //               setSettingList((prev) => [...prev, { label: item.title, value: item.PHS_ID }])
-  //             })
-  //         })
-  //         // .catch((err) => console.log(err.response.data));
-  // };
+	//   const getAllSetting = () => {
+	//     Axios.get(baseApiUrl +  "settings/getIncomeCategories")
+	//         .then((res) => {
+	//             res.data.Settings.map((item) => {
+	//               setSettingList((prev) => [...prev, { label: item.title, value: item.PHS_ID }])
+	//             })
+	//         })
+	//         // .catch((err) => console.log(err.response.data));
+	// };
 
-  const getExpenseCategoryid = (id) => {
-    Axios.get(baseApiUrl + `incomeCategory/projectId?id=${id}`)
-      .then((res) => {
-        if (res.data?.data) {
-          res.data.data.map((item) => {
-            setCategoryList((prev) => [
-              ...prev,
-              { label: item?.title, value: item?.id },
-            ]);
-          });
-          const formattedData = formatTreeData(res.data.data);
-          setTreeData(formattedData);
-          toast.success(res.data.Message);
-        } else {
-          setCategoryList([]);
-          toast.success(res.data.Message);
-        }
-      })
-      .catch((err) => toast.error(err?.response?.data?.message));
-  };
-  const handleTreeChange = (data, id) => {
-    console.log("handleTreeChange", data, id);
-    return data.map((item) => ({
-      ...item,
-      checked: id == item.value ? true : false,
-      children:
-        item?.children && item.children.length > 0
-          ? handleTreeChange(item.children, id)
-          : undefined,
-    }));
-  };
+	const getExpenseCategoryid = (id) => {
+		Axios.get(baseApiUrl + `incomeCategory/projectId?id=${id}`)
+			.then((res) => {
+				if (res.data?.data) {
+					res.data.data.map((item) => {
+						setCategoryList((prev) => [...prev, { label: item?.title, value: item?.id }]);
+					});
+					const formattedData = formatTreeData(res.data.data);
+					setTreeData(formattedData);
+					toast.success(res.data.Message);
+				} else {
+					setCategoryList([]);
+					toast.success(res.data.Message);
+				}
+			})
+			.catch((err) => toast.error(err?.response?.data?.message));
+	};
+	const handleTreeChange = (data, id) => {
+		// console.log("handleTreeChange", data, id);
+		return data.map((item) => ({
+			...item,
+			checked: id == item.value ? true : false,
+			children: item?.children && item.children.length > 0 ? handleTreeChange(item.children, id) : undefined
+		}));
+	};
 
-  const formatTreeData = (data) => {
-    return data.map((item) => ({
-      value: item.id,
-      label: item.title,
-      children:
-        item.children.length > 0 ? formatTreeData(item.children) : undefined,
-    }));
-  };
+	const formatTreeData = (data) => {
+		return data.map((item) => ({
+			value: item.id,
+			label: item.title,
+			children: item.children.length > 0 ? formatTreeData(item.children) : undefined
+		}));
+	};
 
-  useEffect(() => {
-    // console.log('RRRRRRRRRRRRRRRRRRRR', accountTransaction)
-    getAccountTransaction(accountTransaction);
-    getExpenseCategoryid(accountTransaction);
-    const user = localStorage.getItem("user");
-    // console.log("Use Effect", user);
+	useEffect(() => {
+		// console.log('RRRRRRRRRRRRRRRRRRRR', accountTransaction)
+		getAccountTransaction(accountTransaction);
+		getExpenseCategoryid(accountTransaction);
+		const user = localStorage.getItem("user");
+		// console.log("Use Effect", user);
 
-    const user1 = JSON.parse(user);
-    // setuser(user1);
-    setuserRole(user1?.roles);
-    // getAllIncomeSetting()
-  }, []);
+		const user1 = JSON.parse(user);
+		// setuser(user1);
+		setuserRole(user1?.roles);
+		// getAllIncomeSetting()
+	}, []);
 
-  const columns = [
-    {
-      title: "SR No",
-      dataIndex: "id",
-      sorter: (a, b) => a.id - b.id,
-    },
-    {
-      title: "Date",
-      dataIndex: "date",
-      sorter: (a, b) => a.date - b.date,
-      // render: (text, record) => (
-      //     <span>{text?.BuyerName}</span>
-      // ),
-    },
-    {
-      title: "Folio",
-      dataIndex: "ledgerNo",
-      sorter: (a, b) => a.ledgerNo - b.ledgerNo,
-    },
-    // {
-    //   title: "Category ID",
-    //   dataIndex: "categoryId",
-    //   sorter: (a, b) => a.categoryId - b.categoryId,
-    //   // render: (text, record) => (
-    //   //     <span>{text?.BuyerName}</span>
-    //   // ),
-    // },
-    {
-      title: "Category",
-      dataIndex: "categoryIncome",
-      render: (record) => {
-        return <span>{record?.title}</span>;
-      },
-      sorter: (a, b) => a.categoryId.length - b.categoryId.length,
-    },
-    {
-      title: "Description",
-      dataIndex: "description",
-      sorter: (a, b) => a.description - b.description,
-    },
-    {
-      title: "Amount",
-      dataIndex: "amount",
-      sorter: (a, b) => a.amount.length - b.amount.length,
-    },
+	const columns = [
+		{
+			title: "SR No",
+			dataIndex: "id",
+			sorter: (a, b) => a.id - b.id
+		},
+		{
+			title: "Date",
+			dataIndex: "date",
+			sorter: (a, b) => a.date - b.date
+			// render: (text, record) => (
+			//     <span>{text?.BuyerName}</span>
+			// ),
+		},
+		{
+			title: "Folio",
+			dataIndex: "ledgerNo",
+			sorter: (a, b) => a.ledgerNo - b.ledgerNo
+		},
+		// {
+		//   title: "Category ID",
+		//   dataIndex: "categoryId",
+		//   sorter: (a, b) => a.categoryId - b.categoryId,
+		//   // render: (text, record) => (
+		//   //     <span>{text?.BuyerName}</span>
+		//   // ),
+		// },
+		{
+			title: "Category",
+			dataIndex: "categoryIncome",
+			render: (record) => {
+				return <span>{record?.title}</span>;
+			},
+			sorter: (a, b) => a.categoryId.length - b.categoryId.length
+		},
+		{
+			title: "Description",
+			dataIndex: "description",
+			sorter: (a, b) => a.description - b.description
+		},
+		{
+			title: "Amount",
+			dataIndex: "amount",
+			sorter: (a, b) => a.amount.length - b.amount.length
+		},
 
-    {
-      title: "Balance",
-      dataIndex: "balance",
-      sorter: (a, b) => a.balance - b.balance,
-    },
+		{
+			title: "Balance",
+			dataIndex: "balance",
+			sorter: (a, b) => a.balance - b.balance
+		},
 
-    {
-      title: "Action",
-      render: (text, record) => {
-        return (
-          <div className="dropdown dropdown-action text-end">
-            <Link
-              to="/"
-              className="action-icon dropdown-toggle"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <i className="material-icons">more_vert</i>
-            </Link>
-            <div className="dropdown-menu dropdown-menu-right">
-              {/* <Link
+		{
+			title: "Action",
+			render: (text, record) => {
+				return (
+					<div className="dropdown dropdown-action text-end">
+						<Link to="/" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+							<i className="material-icons">more_vert</i>
+						</Link>
+						<div className="dropdown-menu dropdown-menu-right">
+							{/* <Link
                 to="/"
                 className="dropdown-item"
                 data-bs-toggle="modal"
@@ -220,81 +201,76 @@ const IncomeTransactions = () => {
               >
                 <i className="fa fa-pencil m-r-5" /> Edit
               </Link> */}
-              <Link
-                to="/"
-                className="dropdown-item"
-                data-bs-toggle="modal"
-                data-bs-target="#delete_nominee"
-                // onClick={() => {
-                //   setQuery(text.MN_ID);
-                // }}
-              >
-                <i className="fa fa-trash-o m-r-5" /> Delete
-              </Link>
-            </div>
-          </div>
-        );
-      },
-    },
-  ];
+							<Link
+								to="/"
+								className="dropdown-item"
+								data-bs-toggle="modal"
+								data-bs-target="#delete_nominee"
+								// onClick={() => {
+								//   setQuery(text.MN_ID);
+								// }}
+							>
+								<i className="fa fa-trash-o m-r-5" /> Delete
+							</Link>
+						</div>
+					</div>
+				);
+			}
+		}
+	];
 
-  const columns1 = [
-    {
-      title: "SR No",
-      dataIndex: "id",
-      sorter: (a, b) => a.id - b.id,
-    },
-    {
-      title: "Date",
-      dataIndex: "date",
-      sorter: (a, b) => a.date - b.date,
-      // render: (text, record) => (
-      //     <span>{text?.BuyerName}</span>
-      // ),
-    },
+	const columns1 = [
+		{
+			title: "SR No",
+			dataIndex: "id",
+			sorter: (a, b) => a.id - b.id
+		},
+		{
+			title: "Date",
+			dataIndex: "date",
+			sorter: (a, b) => a.date - b.date
+			// render: (text, record) => (
+			//     <span>{text?.BuyerName}</span>
+			// ),
+		},
 
-    // {
-    //   title: "Category ID",
-    //   dataIndex: "categoryId",
-    //   sorter: (a, b) => a.categoryId - b.categoryId,
-    //   // render: (text, record) => (
-    //   //     <span>{text?.BuyerName}</span>
-    //   // ),
-    // },
-    {
-      title: "Category",
-      dataIndex: "categoryIncome",
-      render: (record) => {
-        return <span>{record?.title}</span>;
-      },
-      sorter: (a, b) => a.categoryId.length - b.categoryId.length,
-    },
-    {
-      title: "Description",
-      dataIndex: "description",
-      sorter: (a, b) => a.description - b.description,
-    },
-    {
-      title: "Amount",
-      dataIndex: "amount",
-      sorter: (a, b) => a.amount.length - b.amount.length,
-    },
+		// {
+		//   title: "Category ID",
+		//   dataIndex: "categoryId",
+		//   sorter: (a, b) => a.categoryId - b.categoryId,
+		//   // render: (text, record) => (
+		//   //     <span>{text?.BuyerName}</span>
+		//   // ),
+		// },
+		{
+			title: "Category",
+			dataIndex: "categoryIncome",
+			render: (record) => {
+				return <span>{record?.title}</span>;
+			},
+			sorter: (a, b) => a.categoryId.length - b.categoryId.length
+		},
+		{
+			title: "Description",
+			dataIndex: "description",
+			sorter: (a, b) => a.description - b.description
+		},
+		{
+			title: "Amount",
+			dataIndex: "amount",
+			sorter: (a, b) => a.amount.length - b.amount.length
+		},
 
-    {
-      title: "Action",
-      render: (text, record) => {
-        return (
-          <div className="dropdown dropdown-action text-end">
-            <Link
-              to="/"
-              className="action-icon dropdown-toggle"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <i className="material-icons">more_vert</i>
-            </Link>
-            <div className="dropdown-menu dropdown-menu-right">
-              {/* <Link
+		{
+			title: "Action",
+			render: (text, record) => {
+				return (
+					<div className="dropdown dropdown-action text-end">
+						<Link to="/" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+							<i className="material-icons">more_vert</i>
+						</Link>
+						<div className="dropdown-menu dropdown-menu-right">
+							{/* <Link
                 to="/"
                 className="dropdown-item"
                 data-bs-toggle="modal"
@@ -315,58 +291,58 @@ const IncomeTransactions = () => {
               >
                 <i className="fa fa-pencil m-r-5" /> Edit
               </Link> */}
-              <Link
-                to="/"
-                className="dropdown-item"
-                data-bs-toggle="modal"
-                data-bs-target="#delete_nominee"
-                // onClick={() => {
-                //   setQuery(text.MN_ID);
-                // }}
-              >
-                <i className="fa fa-trash-o m-r-5" /> Delete
-              </Link>
-            </div>
-          </div>
-        );
-      },
-    },
-  ];
-  const [show, setShow] = useState(false);
+							<Link
+								to="/"
+								className="dropdown-item"
+								data-bs-toggle="modal"
+								data-bs-target="#delete_nominee"
+								// onClick={() => {
+								//   setQuery(text.MN_ID);
+								// }}
+							>
+								<i className="fa fa-trash-o m-r-5" /> Delete
+							</Link>
+						</div>
+					</div>
+				);
+			}
+		}
+	];
+	const [show, setShow] = useState(false);
 
-  const onChange = (currentNode, selectedNodes) => {
-    console.log("onChange::", currentNode, selectedNodes);
-  };
-  const onAction = (node, action) => {
-    console.log("onAction::", action, node);
-  };
-  const onNodeToggle = (currentNode) => {
-    console.log("onNodeToggle::", currentNode);
-  };
+	const onChange = (currentNode, selectedNodes) => {
+		// console.log("onChange::", currentNode, selectedNodes);
+	};
+	const onAction = (node, action) => {
+		// console.log("onAction::", action, node);
+	};
+	const onNodeToggle = (currentNode) => {
+		// console.log("onNodeToggle::", currentNode);
+	};
 
-  return (
-    <>
-      {/* Page Wrapper */}
-      <div className="page-wrapper">
-        <Helmet>
-          <title>Account Transactions - HRMS Admin Template</title>
-          <meta name="description" content="Login page" />
-        </Helmet>
-        {/* Page Content */}
-        <div className="content container-fluid">
-          {/* Page Header */}
-          <div className="page-header">
-            <div className="row align-items-center">
-              <div className="col">
-                <h3 className="page-title">Income Transactions</h3>
-                <ul className="breadcrumb">
-                  <li className="breadcrumb-item">
-                    <Link to="/app/main/dashboard">Dashboard</Link>
-                  </li>
-                  <li className="breadcrumb-item active">Accounts</li>
-                </ul>
-              </div>
-              {/* <div className="col-auto float-end ml-auto">
+	return (
+		<>
+			{/* Page Wrapper */}
+			<div className="page-wrapper">
+				<Helmet>
+					<title>Account Transactions - HRMS Admin Template</title>
+					<meta name="description" content="Login page" />
+				</Helmet>
+				{/* Page Content */}
+				<div className="content container-fluid">
+					{/* Page Header */}
+					<div className="page-header">
+						<div className="row align-items-center">
+							<div className="col">
+								<h3 className="page-title">Income Transactions</h3>
+								<ul className="breadcrumb">
+									<li className="breadcrumb-item">
+										<Link to="/app/main/dashboard">Dashboard</Link>
+									</li>
+									<li className="breadcrumb-item active">Accounts</li>
+								</ul>
+							</div>
+							{/* <div className="col-auto float-end ml-auto">
                 <p
                   href="#"
                   className="btn add-btn"
@@ -376,40 +352,32 @@ const IncomeTransactions = () => {
                   Export
                 </p>
               </div> */}
-              {accountTransaction == 1 &&
-                (userRole?.name == "Admin" ||
-                  userRole?.slug == "accountTransaction" ||
-                  userRole?.slug == "accounts") && (
-                  <div className="col-auto float-end ml-auto">
-                    <p
-                      href="#"
-                      className="btn add-btn"
-                      onClick={() => setIsShowIncomeModal(true)}
-                    >
-                      <i className="fa fa-plus" />
-                      Income Transaction
-                    </p>
-                  </div>
-                )}
-                {accountTransaction == 2 &&
-                (userRole?.name == "Admin" ||
-                  userRole?.slug == "accountTransaction" ||
-                  userRole?.slug == "accounts") && (
-                  <div className="col-auto float-end ml-auto">
-                    <p
-                      href="#"
-                      className="btn add-btn"
-                      onClick={() => setIsShowVictoriaIncomeModal(true)}
-                    >
-                      <i className="fa fa-plus" />
-                      Income Transaction
-                    </p>
-                  </div>
-                )}
-            </div>
-          </div>
-          {/* /Page Header */}
-          {/* <div className="row">
+							{accountTransaction == 1 &&
+								(userRole?.name == "Admin" ||
+									userRole?.slug == "accountTransaction" ||
+									userRole?.slug == "accounts") && (
+									<div className="col-auto float-end ml-auto">
+										<p href="#" className="btn add-btn" onClick={() => setIsShowIncomeModal(true)}>
+											<i className="fa fa-plus" />
+											Income Transaction
+										</p>
+									</div>
+								)}
+							{accountTransaction == 2 &&
+								(userRole?.name == "Admin" ||
+									userRole?.slug == "accountTransaction" ||
+									userRole?.slug == "accounts") && (
+									<div className="col-auto float-end ml-auto">
+										<p href="#" className="btn add-btn" onClick={() => setIsShowVictoriaIncomeModal(true)}>
+											<i className="fa fa-plus" />
+											Income Transaction
+										</p>
+									</div>
+								)}
+						</div>
+					</div>
+					{/* /Page Header */}
+					{/* <div className="row">
               <div className="col-md-12">
                 <div className="table-responsive">
                   <table className="table table-striped custom-table mb-0">
@@ -441,76 +409,74 @@ const IncomeTransactions = () => {
                             </div>
                           </div>
                         </td>
-                      </tr>										
+                      </tr>
                     </tbody>
                   </table>
                 </div>
               </div>
             </div> */}
-          {/* {data.length > 0 &&
+					{/* {data.length > 0 &&
             data?.map((item) => (
               <CategoryDisplay
-            
+
                 categoryList={categoryList}
               />
             ))} */}
-          {accountTransaction == 1 ? (
-            <div className="col-md-12">
-              <div className="table-responsive">
-                <Table
-                  className="table-striped"
-                  pagination={{
-                    defaultPageSize: 25,
-                    total: (totalPage - 1) * 25,
-                    // total: booking?.length,
-                    showTotal: (total, range) =>
-                      `Showing ${range[0]} to ${range[1]} of ${total} entries`,
-                    showSizeChanger: true,
-                    onShowSizeChange: onShowSizeChange,
-                    itemRender: itemRender,
-                  }}
-                  style={{ overflowX: "auto" }}
-                  columns={columns}
-                  onChange={handleTableChange}
-                  size="middle"
-                  // dataSource={filterTable == null ? booking : filterTable}
-                  dataSource={data}
-                  scroll={{ x: "max-content" }}
-                  rowKey={(record) => record.id}
-                />
-              </div>
-            </div>
-          ) : (
-            <div className="col-md-12">
-              <div className="table-responsive">
-                <Table
-                  className="table-striped"
-                  pagination={{
-                    defaultPageSize: 25,
-                    total: (totalPage - 1) * 25,
-                    // total: booking?.length,
-                    showTotal: (total, range) =>
-                      `Showing ${range[0]} to ${range[1]} of ${total} entries`,
-                    showSizeChanger: true,
-                    onShowSizeChange: onShowSizeChange,
-                    itemRender: itemRender,
-                  }}
-                  style={{ overflowX: "auto" }}
-                  columns={columns1}
-                  onChange={handleVictoria}
-                  size="middle"
-                  // dataSource={filterTable == null ? booking : filterTable}
-                  dataSource={data}
-                  scroll={{ x: "max-content" }}
-                  rowKey={(record) => record.id}
-                />
-              </div>
-            </div>
-          )}
-        </div>
-        {/* /Page Content */}
-        {/* Add Modal */}
-        {/* <div className="modal custom-modal fade" id="add_categories" role="dialog">
+					{accountTransaction == 1 ? (
+						<div className="col-md-12">
+							<div className="table-responsive">
+								<Table
+									className="table-striped"
+									pagination={{
+										defaultPageSize: 25,
+										total: (totalPage - 1) * 25,
+										// total: booking?.length,
+										showTotal: (total, range) => `Showing ${range[0]} to ${range[1]} of ${total} entries`,
+										showSizeChanger: true,
+										onShowSizeChange: onShowSizeChange,
+										itemRender: itemRender
+									}}
+									style={{ overflowX: "auto" }}
+									columns={columns}
+									onChange={handleTableChange}
+									size="middle"
+									// dataSource={filterTable == null ? booking : filterTable}
+									dataSource={data}
+									scroll={{ x: "max-content" }}
+									rowKey={(record) => record.id}
+								/>
+							</div>
+						</div>
+					) : (
+						<div className="col-md-12">
+							<div className="table-responsive">
+								<Table
+									className="table-striped"
+									pagination={{
+										defaultPageSize: 25,
+										total: (totalPage - 1) * 25,
+										// total: booking?.length,
+										showTotal: (total, range) => `Showing ${range[0]} to ${range[1]} of ${total} entries`,
+										showSizeChanger: true,
+										onShowSizeChange: onShowSizeChange,
+										itemRender: itemRender
+									}}
+									style={{ overflowX: "auto" }}
+									columns={columns1}
+									onChange={handleVictoria}
+									size="middle"
+									// dataSource={filterTable == null ? booking : filterTable}
+									dataSource={data}
+									scroll={{ x: "max-content" }}
+									rowKey={(record) => record.id}
+								/>
+							</div>
+						</div>
+					)}
+				</div>
+				{/* /Page Content */}
+				{/* Add Modal */}
+				{/* <div className="modal custom-modal fade" id="add_categories" role="dialog">
             <div className="modal-dialog modal-dialog-centered" role="document">
               <div className="modal-content">
                 <div className="modal-header">
@@ -620,129 +586,122 @@ const IncomeTransactions = () => {
               </div>
             </div>
           </div> */}
-        {/* Create Account Transaction Modal */}
-        <Modal show={isShowAccountTransactionModal}>
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title">Add Income Transaction</h5>
-              <button
-                type="button"
-                className="close"
-                onClick={() => {
-                  setIsShowAccountTransactionModal(false);
-                }}
-              >
-                <span aria-hidden="true">×</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              <Formik
-                initialValues={accountTransactionInitialValues}
-                validate={(values) => {
-                  const errors = {};
-                  if (!values.amount) {
-                    errors.amount = "Amount is required";
-                  }
-                  // if (!values.type) {
-                  //   errors.type = "Type is required";
-                  // }
-                  if (!values.categoryId) {
-                    errors.categoryId = "CategoryId is required";
-                  }
+				{/* Create Account Transaction Modal */}
+				<Modal show={isShowAccountTransactionModal}>
+					<div className="modal-content">
+						<div className="modal-header">
+							<h5 className="modal-title">Add Income Transaction</h5>
+							<button
+								type="button"
+								className="close"
+								onClick={() => {
+									setIsShowAccountTransactionModal(false);
+								}}
+							>
+								<span aria-hidden="true">×</span>
+							</button>
+						</div>
+						<div className="modal-body">
+							<Formik
+								initialValues={accountTransactionInitialValues}
+								validate={(values) => {
+									const errors = {};
+									if (!values.amount) {
+										errors.amount = "Amount is required";
+									}
+									// if (!values.type) {
+									//   errors.type = "Type is required";
+									// }
+									if (!values.categoryId) {
+										errors.categoryId = "CategoryId is required";
+									}
 
-                  return errors;
-                }}
-                onSubmit={async (values, { setSubmitting }) => {
-                  const formData = {
-                    amount: parseInt(values.amount),
-                    type: "Income",
-                    categoryId: values.categoryId,
-                    projectId: accountTransaction,
-                  };
-                  try {
-                    setLoading(true);
-                    const res = await Axios.post(
-                      baseApiUrl + "accountTransaction/add",
-                      formData
-                    );
-                    if (res.data.status == 200) {
-                      getAccountTransaction(accountTransaction);
-                      toast.success(res.data.message);
-                      setLoading(false);
-                      setIsShowAccountTransactionModal(false);
-                    }
-                    // else {
-                    //     toast.success(res.data.message);
-                    // }
-                  } catch (err) {
-                    setLoading(false);
-                    toast.error(err?.response?.data?.message);
-                    // console.log(err.response.data);
-                  }
-                }}
-              >
-                {({
-                  values,
-                  errors,
-                  touched,
-                  handleChange,
-                  handleBlur,
-                  handleSubmit,
-                  setFieldValue,
-                  isSubmitting,
-                  isValid,
-                  /* and other goodies */
-                }) => {
-                  return (
-                    <form onSubmit={handleSubmit}>
-                      <div className="row">
-                        <div className="col-sm-12">
-                          <div className="form-group">
-                            <label>
-                              Category
-                              <span className="text-danger"> *</span>
-                            </label>
-                            <DropdownTreeSelect
-                              value={values.categoryId}
-                              data={treeData}
-                              onAction={onAction}
-                              onNodeToggle={onNodeToggle}
-                              className="w-100"
-                              onChange={(currentNode) => {
-                                // setParentCategory(currentNode.value);
+									return errors;
+								}}
+								onSubmit={async (values, { setSubmitting }) => {
+									const formData = {
+										amount: parseInt(values.amount),
+										type: "Income",
+										categoryId: values.categoryId,
+										projectId: accountTransaction
+									};
+									try {
+										setLoading(true);
+										const res = await Axios.post(baseApiUrl + "accountTransaction/add", formData);
+										if (res.data.status == 200) {
+											getAccountTransaction(accountTransaction);
+											toast.success(res.data.message);
+											setLoading(false);
+											setIsShowAccountTransactionModal(false);
+										}
+										// else {
+										//     toast.success(res.data.message);
+										// }
+									} catch (err) {
+										setLoading(false);
+										toast.error(err?.response?.data?.message);
+										// console.log(err.response.data);
+									}
+								}}
+							>
+								{({
+									values,
+									errors,
+									touched,
+									handleChange,
+									handleBlur,
+									handleSubmit,
+									setFieldValue,
+									isSubmitting,
+									isValid
+									/* and other goodies */
+								}) => {
+									return (
+										<form onSubmit={handleSubmit}>
+											<div className="row">
+												<div className="col-sm-12">
+													<div className="form-group">
+														<label>
+															Category
+															<span className="text-danger"> *</span>
+														</label>
+														<DropdownTreeSelect
+															value={values.categoryId}
+															data={treeData}
+															onAction={onAction}
+															onNodeToggle={onNodeToggle}
+															className="w-100"
+															onChange={(currentNode) => {
+																// setParentCategory(currentNode.value);
 
-                                setFieldValue("categoryId", currentNode.value);
-                              }}
-                            />
-                            <span className="error">
-                              {errors.categoryId &&
-                                touched.categoryId &&
-                                errors.categoryId}
-                            </span>
-                          </div>
-                        </div>
+																setFieldValue("categoryId", currentNode.value);
+															}}
+														/>
+														<span className="error">
+															{errors.categoryId && touched.categoryId && errors.categoryId}
+														</span>
+													</div>
+												</div>
 
-                        <div className="col-sm-12">
-                          <div className="form-group">
-                            <label>
-                              Amount
-                              <span className="text-danger"> *</span>
-                            </label>
-                            <input
-                              className="form-control"
-                              type="text"
-                              placeholder="Amount"
-                              onChange={(e) => {
-                                setFieldValue("amount", e.target.value);
-                              }}
-                            />
-                            <span className="error">
-                              {errors.amount && touched.amount && errors.amount}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="col-sm-12">
-                          {/* <div className="form-group">
+												<div className="col-sm-12">
+													<div className="form-group">
+														<label>
+															Amount
+															<span className="text-danger"> *</span>
+														</label>
+														<input
+															className="form-control"
+															type="text"
+															placeholder="Amount"
+															onChange={(e) => {
+																setFieldValue("amount", e.target.value);
+															}}
+														/>
+														<span className="error">{errors.amount && touched.amount && errors.amount}</span>
+													</div>
+												</div>
+												<div className="col-sm-12">
+													{/* <div className="form-group">
                           <label>
                             Type
                             <span className="text-danger"> *</span>
@@ -761,239 +720,205 @@ const IncomeTransactions = () => {
                             {errors.type && touched.type && errors.type}
                           </span>
                         </div> */}
-                        </div>
-                      </div>
-                      <div className="submit-section">
-                        {loading ? (
-                          <button
-                            type="submit"
-                            disabled={true}
-                            className="btn btn-primary submit-btn"
-                          >
-                            <div
-                              className="spinner-border text-warning"
-                              role="status"
-                            >
-                              <span className="sr-only">Loading...</span>
-                            </div>
-                          </button>
-                        ) : (
-                          <button
-                            type="submit"
-                            className="btn btn-primary submit-btn"
-                          >
-                            Submit
-                          </button>
-                        )}
-                      </div>
-                    </form>
-                  );
-                }}
-              </Formik>
-            </div>
-          </div>
-        </Modal>
+												</div>
+											</div>
+											<div className="submit-section">
+												{loading ? (
+													<button type="submit" disabled={true} className="btn btn-primary submit-btn">
+														<div className="spinner-border text-warning" role="status">
+															<span className="sr-only">Loading...</span>
+														</div>
+													</button>
+												) : (
+													<button type="submit" className="btn btn-primary submit-btn">
+														Submit
+													</button>
+												)}
+											</div>
+										</form>
+									);
+								}}
+							</Formik>
+						</div>
+					</div>
+				</Modal>
 
-        {/* {Modal income transaction } */}
+				{/* {Modal income transaction } */}
 
-        <Modal show={isShowIncomeModal} dialogClassName="employee-modal">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title">Create Income Transaction</h5>
-              <button
-                type="button"
-                className="close"
-                onClick={() => setIsShowIncomeModal(false)}
-              >
-                <span aria-hidden="true">×</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              <Formik
-                initialValues={{
-                  date: 1,
-                  categoryId: "",
-                  amount: "",
-                  projectId: "",
-                  type: "Income",
-                  month: "",
-                  ledgerNo: "",
-                  description: "",
-                }}
-                validate={(values) => {
-                  const errors = {};
-                  // if (!values.month) {
-                  //   errors.month = " Month is required";
-                  // }
-                  if (!values.ledgerNo) {
-                    errors.ledgerNo = "Ledger No is required";
-                  }
-                  if (!values.categoryId) {
-                    errors.categoryId = "CategoryId is required";
-                  }
-                  if (!values.amount) {
-                    errors.amount = "Amount is required";
-                  }
-                  console.log("errors", errors);
-                  return errors;
-                }}
-                onSubmit={async (values, { setSubmitting }) => {
-                  const formData = {
-                    amount: parseInt(values.amount),
-                    type: "Income",
-                    categoryId: values.categoryId,
-                    projectId: accountTransaction,
-                    date: `${values.month}-${values.date}`,
-                    ledgerNo: values.ledgerNo,
-                    description: values.description,
-                    balance: values.amount,
-                  };
-                  console.log("formData", formData);
-                  try {
-                    setLoading(true);
-                    const res = await Axios.post(
-                      baseApiUrl + "/accountTransaction/add",
-                      formData
-                    );
-                    if (res.data.status == 200) {
-                      getAccountTransaction(accountTransaction);
-                      setIsShowIncomeModal(false);
-                      setLoading(false);
-                      toast.success(res.data.message);
-                    }
-                  } catch (err) {
-                    setLoading(false);
-                    toast.error(err?.response?.data?.message);
-                    // console.log(err.response.data);
-                  }
-                }}
-              >
-                {({
-                  values,
-                  errors,
-                  touched,
-                  handleChange,
-                  handleBlur,
-                  handleSubmit,
-                  setFieldValue,
-                  isSubmitting,
-                  /* and other goodies */
-                }) => (
-                  <form onSubmit={handleSubmit}>
-                    <div className="row">
-                      <div className="col-sm-6">
-                        <div className="form-group">
-                          <label>
-                            Folio
-                            <span className="text-danger"> *</span>
-                          </label>
-                          <input
-                            className="form-control"
-                            type="text"
-                            placeholder="Enter Folio No"
-                            onChange={(e) => {
-                              setFieldValue("ledgerNo", e.target.value);
-                            }}
-                          />
-                          <span className="error">
-                            {errors.ledgerNo &&
-                              touched.ledgerNo &&
-                              errors.ledgerNo}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="col-sm-6">
-                        <div className="form-group">
-                          <label>
-                            Month <span className="text-danger">*</span>
-                          </label>
-                          <input
-                            className="form-control"
-                            type="month"
-                            onChange={(e) => {
-                              setFieldValue("month", e.target.value);
-                            }}
-                          />
-                          <span className="error">
-                            {errors.month && touched.month && errors.month}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="col-sm-6">
-                        <div className="form-group">
-                          <label>
-                            Category <span className="text-danger">*</span>
-                          </label>
-                          <DropdownTreeSelect
-                            value={values.categoryId}
-                            data={treeData}
-                            onAction={onAction}
-                            onNodeToggle={onNodeToggle}
-                            className="w-100"
-                            onChange={(currentNode) => {
-                              if (currentNode.checked) {
-                                setFieldValue("categoryId", currentNode.value);
-                                const data = handleTreeChange(
-                                  treeData,
-                                  currentNode.value
-                                );
-                                setTreeData(data);
-                              } else {
-                                setFieldValue("categoryId", null);
-                                const data = handleTreeChange(treeData, null);
-                                setTreeData(data);
-                              }
-                            }}
-                          />
-                          <span className="error">
-                            {errors.categoryId &&
-                              touched.categoryId &&
-                              errors.categoryId}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="col-sm-6">
-                        <div className="form-group">
-                          <label>
-                            Amount <span className="text-danger">*</span>
-                          </label>
-                          <input
-                            className="form-control"
-                            type="text"
-                            onChange={(e) => {
-                              setFieldValue("amount", e.target.value);
-                            }}
-                          />
-                          <span className="error">
-                            {errors.amount && touched.amount && errors.amount}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="col-sm-6">
-                        <div className="form-group">
-                          <label>
-                            Description
-                            <span className="text-danger"> *</span>
-                          </label>
-                          <input
-                            className="form-control"
-                            type="text"
-                            placeholder="Enter Description"
-                            onChange={(e) => {
-                              setFieldValue("description", e.target.value);
-                            }}
-                          />
-                          <span className="error">
-                            {errors.description &&
-                              touched.description &&
-                              errors.description}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
+				<Modal show={isShowIncomeModal} dialogClassName="employee-modal">
+					<div className="modal-content">
+						<div className="modal-header">
+							<h5 className="modal-title">Create Income Transaction</h5>
+							<button type="button" className="close" onClick={() => setIsShowIncomeModal(false)}>
+								<span aria-hidden="true">×</span>
+							</button>
+						</div>
+						<div className="modal-body">
+							<Formik
+								initialValues={{
+									date: 1,
+									categoryId: "",
+									amount: "",
+									projectId: "",
+									type: "Income",
+									month: "",
+									ledgerNo: "",
+									description: ""
+								}}
+								validate={(values) => {
+									const errors = {};
+									// if (!values.month) {
+									//   errors.month = " Month is required";
+									// }
+									if (!values.ledgerNo) {
+										errors.ledgerNo = "Ledger No is required";
+									}
+									if (!values.categoryId) {
+										errors.categoryId = "CategoryId is required";
+									}
+									if (!values.amount) {
+										errors.amount = "Amount is required";
+									}
+									console.log("errors", errors);
+									return errors;
+								}}
+								onSubmit={async (values, { setSubmitting }) => {
+									const formData = {
+										amount: parseInt(values.amount),
+										type: "Income",
+										categoryId: values.categoryId,
+										projectId: accountTransaction,
+										date: `${values.month}-${values.date}`,
+										ledgerNo: values.ledgerNo,
+										description: values.description,
+										balance: values.amount
+									};
+									// console.log("formData", formData);
+									try {
+										setLoading(true);
+										const res = await Axios.post(baseApiUrl + "/accountTransaction/add", formData);
+										if (res.data.status == 200) {
+											getAccountTransaction(accountTransaction);
+											setIsShowIncomeModal(false);
+											setLoading(false);
+											toast.success(res.data.message);
+										}
+									} catch (err) {
+										setLoading(false);
+										toast.error(err?.response?.data?.message);
+										// console.log(err.response.data);
+									}
+								}}
+							>
+								{({
+									values,
+									errors,
+									touched,
+									handleChange,
+									handleBlur,
+									handleSubmit,
+									setFieldValue,
+									isSubmitting
+									/* and other goodies */
+								}) => (
+									<form onSubmit={handleSubmit}>
+										<div className="row">
+											<div className="col-sm-6">
+												<div className="form-group">
+													<label>
+														Folio
+														<span className="text-danger"> *</span>
+													</label>
+													<input
+														className="form-control"
+														type="text"
+														placeholder="Enter Folio No"
+														onChange={(e) => {
+															setFieldValue("ledgerNo", e.target.value);
+														}}
+													/>
+													<span className="error">{errors.ledgerNo && touched.ledgerNo && errors.ledgerNo}</span>
+												</div>
+											</div>
+											<div className="col-sm-6">
+												<div className="form-group">
+													<label>
+														Month <span className="text-danger">*</span>
+													</label>
+													<input
+														className="form-control"
+														type="month"
+														onChange={(e) => {
+															setFieldValue("month", e.target.value);
+														}}
+													/>
+													<span className="error">{errors.month && touched.month && errors.month}</span>
+												</div>
+											</div>
+											<div className="col-sm-6">
+												<div className="form-group">
+													<label>
+														Category <span className="text-danger">*</span>
+													</label>
+													<DropdownTreeSelect
+														value={values.categoryId}
+														data={treeData}
+														onAction={onAction}
+														onNodeToggle={onNodeToggle}
+														className="w-100"
+														onChange={(currentNode) => {
+															if (currentNode.checked) {
+																setFieldValue("categoryId", currentNode.value);
+																const data = handleTreeChange(treeData, currentNode.value);
+																setTreeData(data);
+															} else {
+																setFieldValue("categoryId", null);
+																const data = handleTreeChange(treeData, null);
+																setTreeData(data);
+															}
+														}}
+													/>
+													<span className="error">{errors.categoryId && touched.categoryId && errors.categoryId}</span>
+												</div>
+											</div>
+											<div className="col-sm-6">
+												<div className="form-group">
+													<label>
+														Amount <span className="text-danger">*</span>
+													</label>
+													<input
+														className="form-control"
+														type="text"
+														onChange={(e) => {
+															setFieldValue("amount", e.target.value);
+														}}
+													/>
+													<span className="error">{errors.amount && touched.amount && errors.amount}</span>
+												</div>
+											</div>
+											<div className="col-sm-6">
+												<div className="form-group">
+													<label>
+														Description
+														<span className="text-danger"> *</span>
+													</label>
+													<input
+														className="form-control"
+														type="text"
+														placeholder="Enter Description"
+														onChange={(e) => {
+															setFieldValue("description", e.target.value);
+														}}
+													/>
+													<span className="error">
+														{errors.description && touched.description && errors.description}
+													</span>
+												</div>
+											</div>
+										</div>
 
-                    {/* <label></label> */}
-                    {/* <ReactSummernote
+										{/* <label></label> */}
+										{/* <ReactSummernote
                         value="Default value"
                         options={{
                           lang: "ru-RU",
@@ -1013,239 +938,205 @@ const IncomeTransactions = () => {
                         onImageUpload={onImageUpload}
                       /> */}
 
-                    <div className="submit-section">
-                      {loading ? (
-                        <button
-                          type="submit"
-                          disabled={true}
-                          className="btn btn-primary submit-btn"
-                        >
-                          <div
-                            class="spinner-border text-warning"
-                            role="status"
-                          >
-                            <span class="sr-only">Loading...</span>
-                          </div>
-                        </button>
-                      ) : (
-                        <button
-                          type="submit"
-                          // onClick={handleSubmit}
-                          className="btn btn-primary submit-btn"
-                        >
-                          Submit
-                        </button>
-                      )}
-                    </div>
-                  </form>
-                )}
-              </Formik>
-            </div>
-          </div>
-        </Modal>
-        {/* {Modal income transaction } */}
+										<div className="submit-section">
+											{loading ? (
+												<button type="submit" disabled={true} className="btn btn-primary submit-btn">
+													<div class="spinner-border text-warning" role="status">
+														<span class="sr-only">Loading...</span>
+													</div>
+												</button>
+											) : (
+												<button
+													type="submit"
+													// onClick={handleSubmit}
+													className="btn btn-primary submit-btn"
+												>
+													Submit
+												</button>
+											)}
+										</div>
+									</form>
+								)}
+							</Formik>
+						</div>
+					</div>
+				</Modal>
+				{/* {Modal income transaction } */}
 
-        {/* {Modal income Victoria transaction } */}
-          <Modal show={isShowVictoriaIncomeModal} dialogClassName="employee-modal">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Create Income Transaction</h5>
-                <button
-                  type="button"
-                  className="close"
-                  onClick={() => setIsShowVictoriaIncomeModal(false)}
-                >
-                  <span aria-hidden="true">×</span>
-                </button>
-              </div>
-              <div className="modal-body">
-                <Formik
-                  initialValues={{
-                    categoryId: "",
-                    amount: "",
-                    projectId: "",
-                    type: "Income",
-                    month: "",
-                    ledgerNo: "",
-                    description: "",
-                  }}
-                  validate={(values) => {
-                    const errors = {};
-                    // if (!values.month) {
-                    //   errors.month = " Month is required";
-                    // }
-                    if (!values.ledgerNo) {
-                      errors.ledgerNo = "Ledger No is required";
-                    }
-                    if (!values.categoryId) {
-                      errors.categoryId = "CategoryId is required";
-                    }
-                    if (!values.amount) {
-                      errors.amount = "Amount is required";
-                    }
-                    console.log("errors", errors);
-                    return errors;
-                  }}
-                  onSubmit={async (values, { setSubmitting }) => {
-                    const formData = {
-                      amount: parseInt(values.amount),
-                      type: "Income",
-                      categoryId: values.categoryId,
-                      projectId: accountTransaction,
-                      date: values.month,
-                      ledgerNo: values.ledgerNo,
-                      description: values.description,
-                      balance: values.amount,
-                    };
-                    console.log("formData", formData);
-                    try {
-                      setLoading(true);
-                      const res = await Axios.post(
-                        baseApiUrl + "/accountTransaction/add",
-                        formData
-                      );
-                      if (res.data.status == 200) {
-                        getAccountTransaction(accountTransaction);
-                        setIsShowVictoriaIncomeModal(false);
-                        setLoading(false);
-                        toast.success(res.data.message);
-                      }
-                    } catch (err) {
-                      setLoading(false);
-                      toast.error(err?.response?.data?.message);
-                      // console.log(err.response.data);
-                    }
-                  }}
-                >
-                  {({
-                    values,
-                    errors,
-                    touched,
-                    handleChange,
-                    handleBlur,
-                    handleSubmit,
-                    setFieldValue,
-                    isSubmitting,
-                    /* and other goodies */
-                  }) => (
-                    <form onSubmit={handleSubmit}>
-                      <div className="row">
-                        <div className="col-sm-6">
-                          <div className="form-group">
-                            <label>
-                              Folio
-                              <span className="text-danger"> *</span>
-                            </label>
-                            <input
-                              className="form-control"
-                              type="text"
-                              placeholder="Enter Folio No"
-                              onChange={(e) => {
-                                setFieldValue("ledgerNo", e.target.value);
-                              }}
-                            />
-                            <span className="error">
-                              {errors.ledgerNo &&
-                                touched.ledgerNo &&
-                                errors.ledgerNo}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="col-sm-6">
-                          <div className="form-group">
-                            <label>
-                              Month <span className="text-danger">*</span>
-                            </label>
-                            <input
-                              className="form-control"
-                              type="date"
-                              onChange={(e) => {
-                                setFieldValue("month", e.target.value);
-                              }}
-                            />
-                            <span className="error">
-                              {errors.month && touched.month && errors.month}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="col-sm-6">
-                          <div className="form-group">
-                            <label>
-                              Category <span className="text-danger">*</span>
-                            </label>
-                            <DropdownTreeSelect
-                              value={values.categoryId}
-                              data={treeData}
-                              onAction={onAction}
-                              onNodeToggle={onNodeToggle}
-                              className="w-100"
-                              onChange={(currentNode) => {
-                                if (currentNode.checked) {
-                                  setFieldValue(
-                                    "categoryId",
-                                    currentNode.value
-                                  );
-                                  const data = handleTreeChange(
-                                    treeData,
-                                    currentNode.value
-                                  );
-                                  setTreeData(data);
-                                } else {
-                                  setFieldValue("categoryId", null);
-                                  const data = handleTreeChange(treeData, null);
-                                  setTreeData(data);
-                                }
-                              }}
-                            />
-                            <span className="error">
-                              {errors.categoryId &&
-                                touched.categoryId &&
-                                errors.categoryId}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="col-sm-6">
-                          <div className="form-group">
-                            <label>
-                              Amount <span className="text-danger">*</span>
-                            </label>
-                            <input
-                              className="form-control"
-                              type="text"
-                              onChange={(e) => {
-                                setFieldValue("amount", e.target.value);
-                              }}
-                            />
-                            <span className="error">
-                              {errors.amount && touched.amount && errors.amount}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="col-sm-6">
-                          <div className="form-group">
-                            <label>
-                              Description
-                              <span className="text-danger"> *</span>
-                            </label>
-                            <input
-                              className="form-control"
-                              type="text"
-                              placeholder="Enter Description"
-                              onChange={(e) => {
-                                setFieldValue("description", e.target.value);
-                              }}
-                            />
-                            <span className="error">
-                              {errors.description &&
-                                touched.description &&
-                                errors.description}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
+				{/* {Modal income Victoria transaction } */}
+				<Modal show={isShowVictoriaIncomeModal} dialogClassName="employee-modal">
+					<div className="modal-content">
+						<div className="modal-header">
+							<h5 className="modal-title">Create Income Transaction</h5>
+							<button type="button" className="close" onClick={() => setIsShowVictoriaIncomeModal(false)}>
+								<span aria-hidden="true">×</span>
+							</button>
+						</div>
+						<div className="modal-body">
+							<Formik
+								initialValues={{
+									categoryId: "",
+									amount: "",
+									projectId: "",
+									type: "Income",
+									month: "",
+									ledgerNo: "",
+									description: ""
+								}}
+								validate={(values) => {
+									const errors = {};
+									// if (!values.month) {
+									//   errors.month = " Month is required";
+									// }
+									if (!values.ledgerNo) {
+										errors.ledgerNo = "Ledger No is required";
+									}
+									if (!values.categoryId) {
+										errors.categoryId = "CategoryId is required";
+									}
+									if (!values.amount) {
+										errors.amount = "Amount is required";
+									}
+									console.log("errors", errors);
+									return errors;
+								}}
+								onSubmit={async (values, { setSubmitting }) => {
+									const formData = {
+										amount: parseInt(values.amount),
+										type: "Income",
+										categoryId: values.categoryId,
+										projectId: accountTransaction,
+										date: values.month,
+										ledgerNo: values.ledgerNo,
+										description: values.description,
+										balance: values.amount
+									};
+									// console.log("formData", formData);
+									try {
+										setLoading(true);
+										const res = await Axios.post(baseApiUrl + "/accountTransaction/add", formData);
+										if (res.data.status == 200) {
+											getAccountTransaction(accountTransaction);
+											setIsShowVictoriaIncomeModal(false);
+											setLoading(false);
+											toast.success(res.data.message);
+										}
+									} catch (err) {
+										setLoading(false);
+										toast.error(err?.response?.data?.message);
+										// console.log(err.response.data);
+									}
+								}}
+							>
+								{({
+									values,
+									errors,
+									touched,
+									handleChange,
+									handleBlur,
+									handleSubmit,
+									setFieldValue,
+									isSubmitting
+									/* and other goodies */
+								}) => (
+									<form onSubmit={handleSubmit}>
+										<div className="row">
+											<div className="col-sm-6">
+												<div className="form-group">
+													<label>
+														Folio
+														<span className="text-danger"> *</span>
+													</label>
+													<input
+														className="form-control"
+														type="text"
+														placeholder="Enter Folio No"
+														onChange={(e) => {
+															setFieldValue("ledgerNo", e.target.value);
+														}}
+													/>
+													<span className="error">{errors.ledgerNo && touched.ledgerNo && errors.ledgerNo}</span>
+												</div>
+											</div>
+											<div className="col-sm-6">
+												<div className="form-group">
+													<label>
+														Month <span className="text-danger">*</span>
+													</label>
+													<input
+														className="form-control"
+														type="date"
+														onChange={(e) => {
+															setFieldValue("month", e.target.value);
+														}}
+													/>
+													<span className="error">{errors.month && touched.month && errors.month}</span>
+												</div>
+											</div>
+											<div className="col-sm-6">
+												<div className="form-group">
+													<label>
+														Category <span className="text-danger">*</span>
+													</label>
+													<DropdownTreeSelect
+														value={values.categoryId}
+														data={treeData}
+														onAction={onAction}
+														onNodeToggle={onNodeToggle}
+														className="w-100"
+														onChange={(currentNode) => {
+															if (currentNode.checked) {
+																setFieldValue("categoryId", currentNode.value);
+																const data = handleTreeChange(treeData, currentNode.value);
+																setTreeData(data);
+															} else {
+																setFieldValue("categoryId", null);
+																const data = handleTreeChange(treeData, null);
+																setTreeData(data);
+															}
+														}}
+													/>
+													<span className="error">{errors.categoryId && touched.categoryId && errors.categoryId}</span>
+												</div>
+											</div>
+											<div className="col-sm-6">
+												<div className="form-group">
+													<label>
+														Amount <span className="text-danger">*</span>
+													</label>
+													<input
+														className="form-control"
+														type="text"
+														onChange={(e) => {
+															setFieldValue("amount", e.target.value);
+														}}
+													/>
+													<span className="error">{errors.amount && touched.amount && errors.amount}</span>
+												</div>
+											</div>
+											<div className="col-sm-6">
+												<div className="form-group">
+													<label>
+														Description
+														<span className="text-danger"> *</span>
+													</label>
+													<input
+														className="form-control"
+														type="text"
+														placeholder="Enter Description"
+														onChange={(e) => {
+															setFieldValue("description", e.target.value);
+														}}
+													/>
+													<span className="error">
+														{errors.description && touched.description && errors.description}
+													</span>
+												</div>
+											</div>
+										</div>
 
-                      {/* <label></label> */}
-                      {/* <ReactSummernote
+										{/* <label></label> */}
+										{/* <ReactSummernote
                         value="Default value"
                         options={{
                           lang: "ru-RU",
@@ -1265,42 +1156,35 @@ const IncomeTransactions = () => {
                         onImageUpload={onImageUpload}
                       /> */}
 
-                      <div className="submit-section">
-                        {loading ? (
-                          <button
-                            type="submit"
-                            disabled={true}
-                            className="btn btn-primary submit-btn"
-                          >
-                            <div
-                              class="spinner-border text-warning"
-                              role="status"
-                            >
-                              <span class="sr-only">Loading...</span>
-                            </div>
-                          </button>
-                        ) : (
-                          <button
-                            type="submit"
-                            // onClick={handleSubmit}
-                            className="btn btn-primary submit-btn"
-                          >
-                            Submit
-                          </button>
-                        )}
-                      </div>
-                    </form>
-                  )}
-                </Formik>
-              </div>
-            </div>
-          </Modal>
-        {/* {Modal income Victoria transaction } */}
+										<div className="submit-section">
+											{loading ? (
+												<button type="submit" disabled={true} className="btn btn-primary submit-btn">
+													<div class="spinner-border text-warning" role="status">
+														<span class="sr-only">Loading...</span>
+													</div>
+												</button>
+											) : (
+												<button
+													type="submit"
+													// onClick={handleSubmit}
+													className="btn btn-primary submit-btn"
+												>
+													Submit
+												</button>
+											)}
+										</div>
+									</form>
+								)}
+							</Formik>
+						</div>
+					</div>
+				</Modal>
+				{/* {Modal income Victoria transaction } */}
 
-        {/* /Create Project Modal */}
-        {/* /Add Modal */}
-        {/* Edit Modal */}
-        {/* <div className="modal custom-modal fade" id="edit_categories" role="dialog">
+				{/* /Create Project Modal */}
+				{/* /Add Modal */}
+				{/* Edit Modal */}
+				{/* <div className="modal custom-modal fade" id="edit_categories" role="dialog">
             <div className="modal-dialog modal-dialog-centered" role="document">
               <div className="modal-content">
                 <div className="modal-header">
@@ -1410,40 +1294,37 @@ const IncomeTransactions = () => {
               </div>
             </div>
           </div> */}
-        {/* /Edit Modal */}
-        {/* Delete Holiday Modal */}
-        <div className="modal custom-modal fade" id="delete" role="dialog">
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-body">
-                <div className="form-header">
-                  <h3>Delete </h3>
-                  <p>Are you sure want to delete?</p>
-                </div>
-                <div className="modal-btn delete-action">
-                  <div className="row">
-                    <div className="col-6">
-                      <a className="btn btn-primary continue-btn">Delete</a>
-                    </div>
-                    <div className="col-6">
-                      <a
-                        data-bs-dismiss="modal"
-                        className="btn btn-primary cancel-btn"
-                      >
-                        Cancel
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        {/* /Delete Holiday Modal */}
-      </div>
-      {/* /Page Wrapper */}
-    </>
-  );
+				{/* /Edit Modal */}
+				{/* Delete Holiday Modal */}
+				<div className="modal custom-modal fade" id="delete" role="dialog">
+					<div className="modal-dialog modal-dialog-centered">
+						<div className="modal-content">
+							<div className="modal-body">
+								<div className="form-header">
+									<h3>Delete </h3>
+									<p>Are you sure want to delete?</p>
+								</div>
+								<div className="modal-btn delete-action">
+									<div className="row">
+										<div className="col-6">
+											<a className="btn btn-primary continue-btn">Delete</a>
+										</div>
+										<div className="col-6">
+											<a data-bs-dismiss="modal" className="btn btn-primary cancel-btn">
+												Cancel
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				{/* /Delete Holiday Modal */}
+			</div>
+			{/* /Page Wrapper */}
+		</>
+	);
 };
 
 export default IncomeTransactions;
