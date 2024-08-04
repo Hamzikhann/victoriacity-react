@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { LogoGroup } from "../Entryfile/imagepath.jsx";
-import { result } from "lodash";
 
-const BallotSearch = () => {
+const FileSearch = () => {
 	const [query, setQuery] = useState("");
-	const [results, setResults] = useState([]);
+	const [results, setResults] = useState(null);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState("");
 
@@ -18,11 +17,11 @@ const BallotSearch = () => {
 		try {
 			// Replace with your API endpoint and update accordingly
 			const payload = {
-				cnic: query
+				card_no: query
 			};
-			const response = await axios.post(`https://victoriacityportal.com/api/ballot`, payload);
+			const response = await axios.post(`https://victoriacityportal.com/api/search/file`, payload);
 			console.log(response);
-			setResults(response.data.data);
+			setResults(response.data);
 		} catch (err) {
 			setError("An error occurred while fetching data.");
 		} finally {
@@ -43,14 +42,14 @@ const BallotSearch = () => {
 					type="text"
 					className="form-control"
 					id="floatingInput"
-					placeholder="Search By Entering CNIC #"
+					placeholder="Search By Entering Card #"
 					value={query}
 					onChange={(e) => setQuery(e.target.value)}
 					style={styles.input}
 				/>
 			</div>
 			<span style={{ color: "red", fontWeight: "bold", marginTop: "10px", marginBottom: "10px", display: "block" }}>
-				Note: please enter the CNIC number properly with the dashes otherwise you will not see your result
+				Note: please enter the Card# number properly to see your result
 			</span>
 			<button className="btn btn-primary" onClick={handleSearch} style={styles.button}>
 				Search
@@ -59,40 +58,24 @@ const BallotSearch = () => {
 			{loading && <p style={styles.message}>Loading...</p>}
 			{error && <p style={styles.message}>{error}</p>}
 			<div style={styles.results}>
-				{results.length > 0 ? (
-					<table class="table table-striped">
+				{results ? (
+					<table className="table ">
 						<thead>
 							<tr>
-								<th scope="col">#</th>
-								<th scope="col">Client Name</th>
-								<th scope="col">CNIC #</th>
-								<th scope="col">VC #</th>
-								<th scope="col">Unit Type</th>
-								<th scope="col">Plot Size</th>
-								<th scope="col">Phase</th>
-								<th scope="col">Sector</th>
-								<th scope="col">Plot_No</th>
-								<th scope="col">Block</th>
-								<th scope="col">Location</th>
+								<th scope="col">Sr#</th>
+								<th scope="col">Note No</th>
+								<th scope="col">Code No</th>
+								<th scope="col">Card No</th>
 							</tr>
 						</thead>
 
 						<tbody>
-							{results.map((result, index) => (
-								<tr>
-									<th scope="row">{index + 1}</th>
-									<td>{result.Member.BuyerName}</td>
-									<td>{result.Member.BuyerCNIC}</td>
-									<td>{result.Reg_Code_Disply}</td>
-									<td>{result.UnitType.Name}</td>
-									<td>{result.PlotSize.Name}</td>
-									<td>{result.Phase.NAME}</td>
-									<td>{result.Sector.NAME}</td>
-									<td>{result.Unit ? result.Unit.Plot_No : ""}</td>
-									<td>{result.Unit ? result.Unit.Block.Name : ""}</td>
-									<td>{result.Location ? result.Location.Plot_Location : ""}</td>
-								</tr>
-							))}
+							<tr>
+								<th scope="row">{results.Sr}</th>
+								<td>{results.Note_No}</td>
+								<td>{results.Code_No}</td>
+								<td>{results.Card_No}</td>
+							</tr>
 						</tbody>
 					</table>
 				) : (
@@ -155,4 +138,4 @@ const styles = {
 	}
 };
 
-export default BallotSearch;
+export default FileSearch;

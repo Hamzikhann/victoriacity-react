@@ -5,7 +5,7 @@
 import React, { useState } from "react";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
-import { Applogo } from "../Entryfile/imagepath.jsx";
+import { LogoGroup } from "../Entryfile/imagepath.jsx";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useHistory } from "react-router-dom";
@@ -124,7 +124,7 @@ const Registrationpage = (props) => {
 					{/* Account Logo */}
 					<div className="account-logo">
 						<Link to="/app/main/dashboard">
-							<img src={Applogo} alt="Dreamguy's Technologies" />
+							<img src={LogoGroup} alt="Dreamguy's Technologies" />
 						</Link>
 					</div>
 					{/* /Account Logo */}

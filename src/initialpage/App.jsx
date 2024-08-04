@@ -9,6 +9,7 @@ import OTP from "./otp";
 import LockScreen from "./lockscreen";
 import ApplyJobs from "./ApplyJob";
 import BallotSearch from "./BallotSearch";
+import FileSearch from "./FileSearch";
 
 //Main App
 import DefaultLayout from "./Sidebar/DefaultLayout";
@@ -93,7 +94,7 @@ export default class App extends Component {
 				<Route path="/lockscreen" component={LockScreen} />
 				<Route path="/applyjob" component={ApplyJobs} />
 				<Route path="/ballotSearch" component={BallotSearch} />
-
+				<Route path="/fileSearch" component={FileSearch} />
 				<Route path="/app" component={DefaultLayout} />
 				<Route path="/settings" component={Settinglayout} />
 				<Route path="/tasks" component={Tasklayout} />
