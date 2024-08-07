@@ -862,12 +862,12 @@ const Booking = () => {
 	};
 
 	const getAllDevelopmentCharges = () => {
-		Axios.get(baseApiUrl + "charges/list").then((res) => {
-			res.data.data.map((item) => {
-				setDevelopmentName((prev) => [...prev, { label: item.Name, value: item.DC_ID }]);
-			});
-			// console.log(res.data.Blocks)
-		});
+		// Axios.get(baseApiUrl + "charges/list").then((res) => {
+		// 	res.data.data.map((item) => {
+		// 		setDevelopmentName((prev) => [...prev, { label: item.Name, value: item.DC_ID }]);
+		// 	});
+		// 	// console.log(res.data.Blocks)
+		// });
 	};
 
 	const getAllMember = () => {
@@ -1221,11 +1221,11 @@ const Booking = () => {
 							<p
 								className="btn add-btn button"
 								onClick={() => {
-									if (currentUser.role === "Admin" && createBookingButton) {
-										setIsShowProjectModal(true);
-									} else {
-										toast.error("YOU ARE NOT AUTHORIZED");
-									}
+									// if (currentUser.role === "Admin" && createBookingButton) {
+									setIsShowProjectModal(true);
+									// } else {
+									// toast.error("YOU ARE NOT AUTHORIZED");
+									// }
 								}}
 							>
 								<i className="fa fa-plus" /> Create Booking

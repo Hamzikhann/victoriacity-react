@@ -517,11 +517,11 @@ const FileSubmission = () => {
 								href="#"
 								className="btn add-btn"
 								onClick={() => {
-									if (fileSubmissionButton) {
-										setIsShowProjectModal(true);
-									} else {
-										toast.error("YOU ARE NOT AUTHORIZED");
-									}
+									// if (fileSubmissionButton) {
+									setIsShowProjectModal(true);
+									// } else {
+									// toast.error("YOU ARE NOT AUTHORIZED");
+									// }
 								}}
 							>
 								<i className="fa fa-plus" /> Create File Submission

@@ -226,11 +226,11 @@ const Nominee = () => {
 								href="#"
 								className="btn add-btn"
 								onClick={() => {
-									if (currentUser.role === "Admin" && createNomineeButton) {
-										setIsShowProjectModal(true);
-									} else {
-										toast.error("YOU ARE NOT AUTHORIZED");
-									}
+									// if (currentUser.role === "Admin" && createNomineeButton) {
+									setIsShowProjectModal(true);
+									// } else {
+									// toast.error("YOU ARE NOT AUTHORIZED");
+									// }
 								}}
 							>
 								<i className="fa fa-plus" /> Create Nominee
