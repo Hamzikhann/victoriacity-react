@@ -36,6 +36,7 @@ const CreateTransaction = () => {
 	const [detailId, setDetailId] = useState("");
 	const [detailIds, setDetailIds] = useState([]);
 	const [amount, setAmount] = useState(0);
+	const [waveOffNo, setWaveOffNo] = useState(0);
 
 	const [BKObj, setBKObj] = useState(null);
 	const [paymentMode, setPaymentMode] = useState([]);
@@ -49,6 +50,7 @@ const CreateTransaction = () => {
 	const [selectedReceiptHead, setSelectedReceiptHead] = useState(null);
 	const [showNdcFeeSelect, setShowNdcFeeSelect] = useState(false); // New state for the NDC Fee select
 	const [showProcessingFeeSelect, setShowProcessingFeeSelect] = useState(false); // New state for the NDC Fee select
+	const [showWaveOffNo, setShowWaveOffNo] = useState(false);
 
 	let { ndcfee = 0 } = useQuery();
 
@@ -56,7 +58,7 @@ const CreateTransaction = () => {
 		{ value: "cash", label: "Cash" },
 		{ value: "payorder", label: "Pay Order" }
 	];
-
+//waveoff% /input field
 	const receipt_options = [
 		{ value: "installments", label: "Installments" },
 		{ value: "development_charges", label: "Development Charges" },
@@ -366,9 +368,21 @@ const CreateTransaction = () => {
 								Address: values.Address
 							};
 
+							const surChargePayload = {
+								vcno: searchTerm,
+								amount: amount,
+								waveOffNo: waveOffNo,
+							}
+
 							try {
 								setloading(true);
-								const res = await Axios.post(baseApiUrl + "bookingTransaction/add", formData);
+								// if recipt sur charges  then this api
+								if(values.receipt_head === "surCharges"){
+									// const res = await Axios.post( baseApiUrl + "/pay/surcharges", surChargePayload);
+									console.log("SurCharge APi Called", surChargePayload)
+								}else{
+									console.log("SurCharge API Failed")
+									// const res = await Axios.post(baseApiUrl + "bookingTransaction/add", formData);
 								// console.log('PPPPPPPPPPPPPPPPPPPPPPPPPPP', res.data.status == 200)
 								if (res.data.status == 200) {
 									// setPDF(res.data.data.FSRC_ID);
@@ -387,6 +401,7 @@ const CreateTransaction = () => {
 									}
 									// setIsShowProjectModal(false);
 									// console.log("I'm Try");
+								}
 								}
 							} catch (err) {
 								setloading(false);
@@ -489,6 +504,8 @@ const CreateTransaction = () => {
 													} else if (value.value === "transfer_tax") {
 														setShowProcessingFeeSelect(true);
 														setShowNdcFeeSelect(false); // Hide NDC Fee select
+													} else if (value.value === "surCharges") {
+														setShowWaveOffNo(true);
 													} else if (value.value === "transfer_fee") {
 														setShowProcessingFeeSelect(false);
 														setShowNdcFeeSelect(false); // Hide NDC Fee select
@@ -499,7 +516,7 @@ const CreateTransaction = () => {
 														const fee = findFee?.Amount || 0;
 														setAmount(fee);
 														setFieldValue("amount", fee);
-													} else {
+													}else {
 														setShowNdcFeeSelect(false);
 														setShowProcessingFeeSelect(false);
 													}
@@ -784,7 +801,23 @@ const CreateTransaction = () => {
 											/>
 										</div>
 									</div>
-									{/* )} */}
+									{showWaveOffNo && (
+										<div className="col-sm-6">
+										<div className="form-group">
+											<label>WaveOff Percent</label>
+											<input
+												className="form-control"
+												type="number"
+												step="any"
+												value={values.waveOffNo}
+												onChange={(e) => {
+													setWaveOffNo(e.target.value);
+													// setFieldValue("waveoffno", e.target.value);
+												}}
+											/>
+										</div>
+									</div>
+									)}
 								</div>
 								<div className="submit-section">
 									{loading ? (
