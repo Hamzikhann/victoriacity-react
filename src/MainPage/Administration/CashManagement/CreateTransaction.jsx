@@ -58,7 +58,7 @@ const CreateTransaction = () => {
 		{ value: "cash", label: "Cash" },
 		{ value: "payorder", label: "Pay Order" }
 	];
-//waveoff% /input field
+	//waveoff% /input field
 	const receipt_options = [
 		{ value: "installments", label: "Installments" },
 		{ value: "development_charges", label: "Development Charges" },
@@ -371,37 +371,55 @@ const CreateTransaction = () => {
 							const surChargePayload = {
 								vcno: searchTerm,
 								amount: amount,
-								waveOffNo: waveOffNo,
-							}
+								waveOffNo: waveOffNo
+							};
 
 							try {
 								setloading(true);
 								// if recipt sur charges  then this api
-								if(values.receipt_head === "surCharges"){
-									// const res = await Axios.post( baseApiUrl + "/pay/surcharges", surChargePayload);
-									console.log("SurCharge APi Called", surChargePayload)
-								}else{
-									console.log("SurCharge API Failed")
-									// const res = await Axios.post(baseApiUrl + "bookingTransaction/add", formData);
-								// console.log('PPPPPPPPPPPPPPPPPPPPPPPPPPP', res.data.status == 200)
-								if (res.data.status == 200) {
-									// setPDF(res.data.data.FSRC_ID);
-									// getAllFileSubmission();
-									setloading(false);
-									if (typeof res.data.message == "string" && res.data.message.toLowerCase().includes("not")) {
-										toast.error(res.data.message);
-									} else if (typeof res.data.message == "string" && res.data.message.toLowerCase().includes("!")) {
-										toast.warning(res.data.message);
-									} else {
-										history.push("/app/administrator/transaction");
-										setFilteredData(false);
-										setSuccessAlert(true);
-										setSubmitting(true);
-										toast.success(res.data.message);
+								if (values.receipt_head === "surCharges") {
+									const res = await Axios.post(baseApiUrl + "pay/surcharges", surChargePayload);
+									console.log(res);
+									if (res.status == 200) {
+										// setPDF(res.data.data.FSRC_ID);
+										// getAllFileSubmission();
+										setloading(false);
+										if (typeof res.data.message == "string" && res.data.message.toLowerCase().includes("not")) {
+											toast.error(res.data.message);
+										} else if (typeof res.data.message == "string" && res.data.message.toLowerCase().includes("!")) {
+											toast.warning(res.data.message);
+										} else {
+											history.push("/app/administrator/transaction");
+											setFilteredData(false);
+											setSuccessAlert(true);
+											setSubmitting(true);
+											toast.success(res.data.message);
+										}
+										// setIsShowProjectModal(false);
+										// console.log("I'm Try");
 									}
-									// setIsShowProjectModal(false);
-									// console.log("I'm Try");
-								}
+									console.log("SurCharge APi Called", surChargePayload);
+								} else {
+									console.log("SurCharge API Failed");
+									const res = await Axios.post(baseApiUrl + "bookingTransaction/add", formData);
+									if (res.data.status == 200) {
+										// setPDF(res.data.data.FSRC_ID);
+										// getAllFileSubmission();
+										setloading(false);
+										if (typeof res.data.message == "string" && res.data.message.toLowerCase().includes("not")) {
+											toast.error(res.data.message);
+										} else if (typeof res.data.message == "string" && res.data.message.toLowerCase().includes("!")) {
+											toast.warning(res.data.message);
+										} else {
+											history.push("/app/administrator/transaction");
+											setFilteredData(false);
+											setSuccessAlert(true);
+											setSubmitting(true);
+											toast.success(res.data.message);
+										}
+										// setIsShowProjectModal(false);
+										// console.log("I'm Try");
+									}
 								}
 							} catch (err) {
 								setloading(false);
@@ -516,7 +534,7 @@ const CreateTransaction = () => {
 														const fee = findFee?.Amount || 0;
 														setAmount(fee);
 														setFieldValue("amount", fee);
-													}else {
+													} else {
 														setShowNdcFeeSelect(false);
 														setShowProcessingFeeSelect(false);
 													}
@@ -803,20 +821,19 @@ const CreateTransaction = () => {
 									</div>
 									{showWaveOffNo && (
 										<div className="col-sm-6">
-										<div className="form-group">
-											<label>WaveOff Percent</label>
-											<input
-												className="form-control"
-												type="number"
-												step="any"
-												value={values.waveOffNo}
-												onChange={(e) => {
-													setWaveOffNo(e.target.value);
-													// setFieldValue("waveoffno", e.target.value);
-												}}
-											/>
+											<div className="form-group">
+												<label>WaveOff Percent</label>
+												<input
+													className="form-control"
+													type="number"
+													step="any"
+													value={values.waveOffNo}
+													onChange={(e) => {
+														setWaveOffNo(e.target.value);
+													}}
+												/>
+											</div>
 										</div>
-									</div>
 									)}
 								</div>
 								<div className="submit-section">
