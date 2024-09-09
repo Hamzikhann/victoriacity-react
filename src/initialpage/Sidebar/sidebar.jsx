@@ -2634,6 +2634,11 @@ const Sidebar = (props) => {
 													<i className="la la-users" /> <span>Report</span>
 												</Link>
 											</li>
+											<li className={pathname.includes("clients") ? "active" : ""}>
+												<Link to="/app/main/surcharges">
+													<i className="la la-users" /> <span>Surcharge Report</span>
+												</Link>
+											</li>
 											{(user.id === 13 || user.id === 18) && (
 												<li className={pathname.includes("unverifiedtransaction") ? "active" : ""}>
 													<Link to="/app/administrator/unverifiedtransaction">

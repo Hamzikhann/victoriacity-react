@@ -394,6 +394,7 @@ const CreateTransaction = () => {
 											setSuccessAlert(true);
 											setSubmitting(true);
 											toast.success(res.data.message);
+											window.open(res.data.file.url, "_blank");
 										}
 										// setIsShowProjectModal(false);
 										// console.log("I'm Try");
@@ -827,9 +828,18 @@ const CreateTransaction = () => {
 													className="form-control"
 													type="number"
 													step="any"
+													readOnly={
+														detailIds.length > 0 ||
+														values.receipt_head == "ndc_fee" ||
+														values.receipt_head == "transfer_tax" ||
+														values.receipt_head == "transfer_fee"
+															? true
+															: false
+													}
 													value={values.waveOffNo}
 													onChange={(e) => {
 														setWaveOffNo(e.target.value);
+														setFieldValue("waveOffNo", e.target.value);
 													}}
 												/>
 											</div>

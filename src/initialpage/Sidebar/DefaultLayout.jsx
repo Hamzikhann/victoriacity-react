@@ -3,6 +3,8 @@
  */
  import React, {useEffect,useState } from 'react';
 import { Link, Route, withRouter } from 'react-router-dom';
+import SurchargeTable from "../SurchargeTable.jsx"
+
 
 // router service
 import routerService from "../../router_service";
@@ -27,6 +29,7 @@ const DefaultLayout = (props) => {
 					{routerService && routerService.map((route,key)=>
 						<Route key={key} path={`${match.url}/${route.path}`} component={route.component} />
 					)}
+					<Route path={`${match.url}/main/surcharges`} component={SurchargeTable} />
 				</div>				
 				<SidebarContent/>
 			{/* </div> */}
