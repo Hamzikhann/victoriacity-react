@@ -67,6 +67,7 @@ const CreateTransaction = () => {
 		{ value: "transfer_tax", label: "File Transfer Tax" },
 		{ value: "ndc_fee", label: "NDC Fee" },
 		{ value: "surCharges", label: "Sur Charges" },
+		{ value: "restorationFee", label: "Restoration Fee" },
 		{ value: "other_misc", label: "Other/MISC" }
 	];
 
@@ -146,6 +147,7 @@ const CreateTransaction = () => {
 				setFilteredData(null);
 				setSuccessAlert(false);
 				setShowAlert(true);
+				toast.error(err.response.data.message);
 			});
 		// setSearchTerm(event.target.value);
 	};
@@ -373,7 +375,10 @@ const CreateTransaction = () => {
 								amount: amount,
 								waveOffNo: waveOffNo
 							};
-
+							const restorationFeeObj = {
+								amount: amount,
+								BK_ID: values.BK_ID
+							};
 							try {
 								setloading(true);
 								// if recipt sur charges  then this api
@@ -389,7 +394,7 @@ const CreateTransaction = () => {
 										} else if (typeof res.data.message == "string" && res.data.message.toLowerCase().includes("!")) {
 											toast.warning(res.data.message);
 										} else {
-											history.push("/app/administrator/transaction");
+											history.push("/app/main/surcharges");
 											setFilteredData(false);
 											setSuccessAlert(true);
 											setSubmitting(true);
@@ -400,6 +405,31 @@ const CreateTransaction = () => {
 										// console.log("I'm Try");
 									}
 									console.log("SurCharge APi Called", surChargePayload);
+								} else if (values.receipt_head === "restorationFee") {
+									console.log("restoration fee ");
+									console.log(formData);
+
+									const res = await Axios.post(baseApiUrl + "restoration/create", restorationFeeObj);
+									console.log(res);
+									if (res.status == 200) {
+										// setPDF(res.data.data.FSRC_ID);
+										// getAllFileSubmission();
+										setloading(false);
+										if (typeof res.data.message == "string" && res.data.message.toLowerCase().includes("not")) {
+											toast.error(res.data.message);
+										} else if (typeof res.data.message == "string" && res.data.message.toLowerCase().includes("!")) {
+											toast.warning(res.data.message);
+										} else {
+											history.push("/app/administrator/restoration");
+											setFilteredData(false);
+											setSuccessAlert(true);
+											setSubmitting(true);
+											toast.success(res.data.message);
+											window.open(res.data.file.url, "_blank");
+										}
+										// setIsShowProjectModal(false);
+										// console.log("I'm Try");
+									}
 								} else {
 									console.log("SurCharge API Failed");
 									const res = await Axios.post(baseApiUrl + "bookingTransaction/add", formData);

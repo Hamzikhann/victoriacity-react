@@ -45,6 +45,7 @@ const Transaction = () => {
 	const [query, setQuery] = useState("");
 	const [transaction, setTransaction] = useState([]);
 	const [bkRegCode, setBkRegCode] = useState();
+	const [bkDate, setBkDate] = useState();
 	const [planTypes, setPlanTypes] = useState([]);
 	const [totalRecords, setTotalRecords] = useState(0);
 	const [page, setPage] = useState(1);
@@ -152,11 +153,7 @@ const Transaction = () => {
 				);
 			}
 		},
-		{
-			title: "BK Reg Code",
-			dataIndex: "BK_Reg_Code",
-			sorter: (a, b) => a.BK_Reg_Code - b.BK_Reg_Code
-		},
+
 		{
 			title: "Reg Code Display",
 			dataIndex: "Booking",
@@ -169,48 +166,7 @@ const Transaction = () => {
 				);
 			}
 		},
-		{
-			title: "CNIC",
-			dataIndex: "Member",
-			render: (text, record) => {
-				return (
-					<Space direction="horizontal" style={{ width: "100%", justifyContent: "center" }}>
-						<span>{text?.BuyerCNIC}</span>
-					</Space>
-				);
-			},
-			sorter: (a, b) => a.Installment_Code.length - b.Installment_Code.length
-		},
-		{
-			title: "Installment Code",
-			dataIndex: "Installment_Code",
-			sorter: (a, b) => a.Installment_Code.length - b.Installment_Code.length
-		},
-		{
-			title: "Transaction Type",
-			dataIndex: "Installment_Type",
-			sorter: (a, b) => a?.Installment_Type?.Name - b?.Installment_Type?.Name,
-			render: (text, record) => {
-				return (
-					<Space direction="horizontal" style={{ width: "100%", justifyContent: "center" }}>
-						<span>{text?.Name}</span>
-					</Space>
-				);
-			}
-		},
-		{
-			title: "Due Month",
-			dataIndex: "Installment_Month",
-			render: (text) => {
-				if (text) {
-					const formattedDate = moment(text).format("DD-MMM-YYYY");
-					return formattedDate;
-				} else {
-					return "";
-				}
-			},
-			sorter: (a, b) => a.Due_Date.length - b.Due_Date.length
-		},
+
 		{
 			title: "Due Amount",
 			dataIndex: "Installment_Due",
@@ -257,7 +213,31 @@ const Transaction = () => {
 			sorter: (a, b) => a.PMID.length - b.PMID.length,
 			render: (text, record) => <div>{text?.Description}</div>
 		},
-
+		{
+			title: "Transaction Type",
+			dataIndex: "Installment_Type",
+			sorter: (a, b) => a?.Installment_Type?.Name - b?.Installment_Type?.Name,
+			render: (text, record) => {
+				return (
+					<Space direction="horizontal" style={{ width: "100%", justifyContent: "center" }}>
+						<span>{text?.Name}</span>
+					</Space>
+				);
+			}
+		},
+		{
+			title: "Due Month",
+			dataIndex: "Installment_Month",
+			render: (text) => {
+				if (text) {
+					const formattedDate = moment(text).format("DD-MMM-YYYY");
+					return formattedDate;
+				} else {
+					return "";
+				}
+			},
+			sorter: (a, b) => a.Due_Date.length - b.Due_Date.length
+		},
 		{
 			title: "Instrument No",
 			dataIndex: "INSTRUMENT_NO",
@@ -267,6 +247,28 @@ const Transaction = () => {
 			//         <img src={text} alt="img" style={{ width: '100px', height: '75px' }} className="img-fluid img-thumbnail rounded-circle" />
 			//     </div>
 			// ),
+		},
+		{
+			title: "Installment Code",
+			dataIndex: "Installment_Code",
+			sorter: (a, b) => a.Installment_Code.length - b.Installment_Code.length
+		},
+		{
+			title: "CNIC",
+			dataIndex: "Member",
+			render: (text, record) => {
+				return (
+					<Space direction="horizontal" style={{ width: "100%", justifyContent: "center" }}>
+						<span>{text?.BuyerCNIC}</span>
+					</Space>
+				);
+			},
+			sorter: (a, b) => a.Installment_Code.length - b.Installment_Code.length
+		},
+		{
+			title: "BK Reg Code",
+			dataIndex: "BK_Reg_Code",
+			sorter: (a, b) => a.BK_Reg_Code - b.BK_Reg_Code
 		},
 		{
 			title: "Verified By",
@@ -424,12 +426,14 @@ const Transaction = () => {
 					setDevelopmentFiltered(res.data.dcFiles);
 					setPlanTypes(res.data.types);
 					setShowAlert(false);
+					// toast.success("working");
 				})
 				.catch((err) => {
-					// console.log(err.response.data.message)
+					console.log(err.response.data.message);
 					setFilteredRegData(null);
 					setSuccessAlert(false);
 					setShowAlert(true);
+					toast.error(err.response.data.message);
 				});
 
 			// const results = data.filter((item) => {
@@ -508,6 +512,26 @@ const Transaction = () => {
 					setTotalPage(res?.data?.totalPage);
 				})
 
+				.catch((err) => console.log(err?.response?.data?.message));
+		} else {
+			getAllTransactions();
+		}
+	};
+
+	const getAllTransactionbyDate = () => {
+		// Check and set CNIC
+		let bkdate = bkDate;
+		if (typeof bkdate === "undefined" || bkdate === null) {
+			bkdate = "";
+		}
+		console.log(bkdate);
+		if (bkdate.length > 0) {
+			Axios.get(baseApiUrl + `transaction/BK_Reg_Code/date?bkdate=${bkdate}`)
+				.then((res) => {
+					console.log(res);
+					setTransaction(res?.data?.Transaction);
+					setTotalPage(res?.data?.Transaction.length);
+				})
 				.catch((err) => console.log(err?.response?.data?.message));
 		} else {
 			getAllTransactions();
@@ -660,6 +684,38 @@ const Transaction = () => {
 							<Button
 								type="primary"
 								onClick={() => getAllTransactionbyBkReg()}
+								// icon={<SearchOutlined />}
+								size="small"
+								style={{
+									width: 90
+								}}
+							>
+								Search
+							</Button>
+							{/* <SearchOutlined
+								style={{
+									color: filtered ? "#1890ff" : undefined
+								}}
+							/> */}
+						</div>
+					</div>
+					<div className="col-sm-3">
+						<div className="form-group">
+							<input
+								className="form-control"
+								type="date"
+								style={{ width: "100%" }}
+								onChange={(e) => {
+									setBkDate(e.target.value);
+									// getAllTransactionbyBkReg(e.target.value);
+								}}
+								placeholder="Search By Date"
+							/>
+						</div>
+						<div>
+							<Button
+								type="primary"
+								onClick={() => getAllTransactionbyDate()}
 								// icon={<SearchOutlined />}
 								size="small"
 								style={{

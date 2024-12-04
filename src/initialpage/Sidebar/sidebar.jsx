@@ -2245,6 +2245,11 @@ const Sidebar = (props) => {
 												<i className="la la-object-ungroup" /> <span>Booking</span>
 											</Link>
 										</li>
+										<li className={pathname.includes("clients") ? "active" : ""}>
+											<Link to="/app/administrator/restoration">
+												<i className="la la-users" /> <span>Restoration Report</span>
+											</Link>
+										</li>
 										<li className="submenu">
 											<a
 												href="#"
@@ -2623,7 +2628,6 @@ const Sidebar = (props) => {
 													<i className="la la-dashboard" /> <span> Dashboard</span> {/*<span className="menu-arrow"/>*/}
 												</Link>
 											</li>
-
 											<li className={pathname.includes("clients") ? "active" : ""}>
 												<Link to="/app/administrator/transaction">
 													<i className="la la-users" /> <span>Transactions</span>
@@ -2637,6 +2641,11 @@ const Sidebar = (props) => {
 											<li className={pathname.includes("clients") ? "active" : ""}>
 												<Link to="/app/main/surcharges">
 													<i className="la la-users" /> <span>Surcharge Report</span>
+												</Link>
+											</li>{" "}
+											<li className={pathname.includes("clients") ? "active" : ""}>
+												<Link to="/app/administrator/restoration">
+													<i className="la la-users" /> <span>Restoration Report</span>
 												</Link>
 											</li>
 											{(user.id === 13 || user.id === 18) && (

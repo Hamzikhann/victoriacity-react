@@ -4,9 +4,9 @@ import { Link } from "react-router-dom";
 import { Button, Table, Input, Tag, Space } from "antd";
 import { Helmet } from "react-helmet";
 
-const SurchargeTable = () => {
+const Restorationfee = () => {
 	const [baseApiUrl, setBaseApiUrl] = useState(process.env.REACT_APP_API_URL + "/api/");
-	const [surchargeData, setSurchargeData] = useState([]);
+	const [restorationfee, setrestorationfee] = useState([]);
 	const [totalPage, setTotalPage] = useState(1); // To handle pagination
 	const columns = [
 		{
@@ -24,7 +24,7 @@ const SurchargeTable = () => {
 					</button>
 					<ul className="dropdown-menu" aria-labelledby={`dropdownMenuButton-${index}`}>
 						<li>
-							<button className="dropdown-item" onClick={() => getSurchargePdf(record.SC_ID, record.BK_ID)}>
+							<button className="dropdown-item" onClick={() => getRestorationfeePdf(record.id, record.BK_ID)}>
 								<i className="fa fa-download m-r-5"></i> Download PDF
 							</button>
 						</li>
@@ -37,28 +37,14 @@ const SurchargeTable = () => {
 			render: (text, record, index) => <span>{index + 1}</span>
 		},
 		{
-			title: "Total Surcharges",
-			dataIndex: ["Booking", "totalSurcharges"],
+			title: "Total Amount",
+			dataIndex: "amount",
 			render: (text) => text
 		},
+		,
 		{
-			title: "Remaining Surcharges",
-			dataIndex: ["Booking", "remainingSurcharges"],
-			render: (text) => text
-		},
-		{
-			title: "Paid Surcharges",
-			dataIndex: ["Booking", "paidSurcharges"],
-			render: (text) => text
-		},
-		// {
-		// 	title: "Surcharge Paid",
-		// 	dataIndex: "amount",
-		// 	render: (text) => text
-		// },
-		{
-			title: "Wave Off",
-			dataIndex: "waveOff",
+			title: "Paid Amount",
+			dataIndex: "amount",
 			render: (text) => text
 		},
 		{
@@ -83,26 +69,31 @@ const SurchargeTable = () => {
 		}
 	];
 
-	const fetchSurchargeData = async () => {
+	const fetchrestorationfee = async () => {
 		try {
 			const response = await axios
-				.get(baseApiUrl + "/surcharge/list")
+				.post(baseApiUrl + "restoration/list")
 				.then((res) => {
+					console.log(res);
 					const formattedData = res.data.data.map((item) => ({
 						...item,
 						paidAt: item.paidAt.slice(0, 10) // Keep only 'YYYY-MM-DD' format for paidAt
 					}));
-
-					setSurchargeData(formattedData);
+					setrestorationfee(formattedData);
+					// setrestorationfee(res.data.data);
 					setTotalPage(response.data.legth);
 				})
 				.catch((error) => {
+					console.log(error);
+
 					// res.send({
 					// 	message: "Error fetching Surcharge list.",
 					// 	data: error
 					// });
 				});
 		} catch (error) {
+			console.log(error);
+
 			// res.send({
 			// 	message: "Surcharge List Not Found.",
 			// 	data: error
@@ -110,23 +101,26 @@ const SurchargeTable = () => {
 		}
 	};
 
-	const getSurchargePdf = async (scid, bkid) => {
+	const getRestorationfeePdf = async (id, bkid) => {
 		try {
 			const surchargePdf = await axios
-				.post(baseApiUrl + "/surcharge/pdf", { scid, bkid })
+				.post(baseApiUrl + "/restoration/pdf", { id, bkid })
 				.then((res) => {
 					if (res) {
 						window.open(res.data.file.url, "_blank");
 					}
 				})
 				.catch((error) => {
-					res.send({
-						message: "Error creating Surcharge PDF.",
-						data: error
-					});
+					console.log(error);
+
+					// res.send({
+					// 	message: "Error creating Surcharge PDF.",
+					// 	data: error
+					// });
 				});
 		} catch (error) {
-			res.send({ message: "Surcharge PDF Not Created.", data: error });
+			console.log(error);
+			// res.send({ message: "Surcharge PDF Not Created.", data: error });
 		}
 	};
 	const onShowSizeChange = (current, size) => {
@@ -147,16 +141,16 @@ const SurchargeTable = () => {
 		console.log("Table changed", pagination, filters, sorter);
 		// Handle pagination, filtering, sorting here
 	};
-	console.log("REsponseeeSurcharge", surchargeData);
+	console.log("REsponseeeSurcharge", restorationfee);
 
 	useEffect(() => {
-		fetchSurchargeData();
+		fetchrestorationfee();
 	}, []);
 
 	return (
 		<div className="page-wrapper">
 			<Helmet>
-				<title>Surcharge - Sheranwala</title>
+				<title>Restoration Fee - Sheranwala</title>
 				{/*<meta name="description" content="Login page"/>*/}
 			</Helmet>
 
@@ -166,12 +160,12 @@ const SurchargeTable = () => {
 				<div className="page-header">
 					<div className="row align-items-center">
 						<div className="col">
-							<h3 className="page-title">Surcharge</h3>
+							<h3 className="page-title">Restoration Fee</h3>
 							<ul className="breadcrumb">
 								<li className="breadcrumb-item">
 									<Link to="/app/main/dashboard">Dashboard</Link>
 								</li>
-								<li className="breadcrumb-item active">Surcharge</li>
+								<li className="breadcrumb-item active">Restoration Fee</li>
 							</ul>
 						</div>
 					</div>
@@ -211,7 +205,7 @@ const SurchargeTable = () => {
 								columns={columns}
 								onChange={handleTableChange}
 								bordered
-								dataSource={surchargeData}
+								dataSource={restorationfee}
 								rowKey={(record) => record.id}
 							/>
 						</div>
@@ -222,4 +216,4 @@ const SurchargeTable = () => {
 	);
 };
 
-export default SurchargeTable;
+export default Restorationfee;

@@ -20,6 +20,7 @@ import chatlayout from "./Sidebar/chatlayout";
 
 import uicomponents from "../MainPage/UIinterface/components";
 import SurchargeTable from "./SurchargeTable";
+// import Restorationfee from "./Restorationfee";
 //Error Page
 import Error404 from "../MainPage/Pages/ErrorPage/error404";
 import Error500 from "../MainPage/Pages/ErrorPage/error500";
@@ -104,6 +105,7 @@ export default class App extends Component {
 
 				<Route path="/ui-components" component={uicomponents} />
 				<Route path="/surcharges" component={SurchargeTable} />
+				{/* <Route path="/restoration" component={Restorationfee} /> */}
 				<Route path="/error-404" component={Error404} />
 				<Route path="/error-500" component={Error500} />
 			</Switch>
